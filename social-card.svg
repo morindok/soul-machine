@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="75%">
+      <stop offset="0%" stop-color="#1a0a1a"/>
+      <stop offset="100%" stop-color="#050207"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d4a84b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#d4a84b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <ellipse cx="600" cy="315" rx="480" ry="300" fill="url(#glow)"/>
+  <g fill="none" stroke="#d4a84b" stroke-width="1" opacity="0.8">
+    <circle cx="600" cy="315" r="240"/>
+    <circle cx="600" cy="315" r="180"/>
+    <circle cx="600" cy="315" r="120"/>
+    <polygon points="600,80 805,435 395,435"/>
+    <polygon points="600,550 395,195 805,195"/>
+  </g>
+  <g fill="none" stroke="#6b1022" stroke-width="1.2" opacity="0.9">
+    <circle cx="600" cy="75" r="26"/>
+    <circle cx="782" cy="405" r="26"/>
+    <circle cx="418" cy="405" r="26"/>
+  </g>
+  <circle cx="600" cy="315" r="7" fill="#d4a84b"/>
+  <text x="600" y="170" text-anchor="middle" fill="#d4a84b" font-family="Georgia, serif" font-size="64" letter-spacing="6">SOUL MACHINE</text>
+  <text x="600" y="215" text-anchor="middle" fill="#c9bfa8" font-family="Georgia, serif" font-size="26" font-style="italic">The Spirit Machine — ماشینِ روح</text>
+  <text x="600" y="560" text-anchor="middle" fill="#8a6a2e" font-family="Georgia, serif" font-size="22" letter-spacing="4">A CODEX OF 101 ILLUMINATED PLATES — BY MORINDOK</text>
+</svg>

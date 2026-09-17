@@ -1,0 +1,1710 @@
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>𝕿𝖍𝖊 𝕸𝖔𝖗𝖎𝖓𝖉𝖔𝖐 𝕬𝖗𝖈𝖍𝖎𝖛𝖊𝖘 — Spirit Machine</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Vazirmatn:wght@300;400;600;800&family=MedievalSharp&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-void: #050207;
+    --bg-deep: #0a0510;
+    --ink-gold: #d4a84b;
+    --ink-gold-dim: #8a6a2e;
+    --ink-blood: #6b1022;
+    --ink-ethereal: #4a7a8a;
+    --ink-ghost: #c9bfa8;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg-void);
+    color: var(--ink-ghost);
+    font-family: 'Vazirmatn', 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(107,16,34,0.25), transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(74,122,138,0.18), transparent 55%),
+      radial-gradient(ellipse at 50% 50%, rgba(212,168,75,0.04), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+  }
+
+  .serif-title { font-family: 'Cinzel', serif; letter-spacing: 0.08em; }
+  .mystic-title { font-family: 'MedievalSharp', 'Cinzel', serif; }
+  .body-fa { font-family: 'Vazirmatn', serif; }
+  .body-en { font-family: 'Cormorant Garamond', serif; }
+
+  .golden-border {
+    border: 1px solid rgba(212,168,75,0.35);
+    box-shadow:
+      inset 0 0 0 1px rgba(212,168,75,0.08),
+      0 0 40px rgba(107,16,34,0.25),
+      0 0 80px rgba(212,168,75,0.05);
+  }
+
+  .parchment {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201,191,168,0.08), transparent 60%),
+      linear-gradient(180deg, #1a1018 0%, #0d0811 50%, #140a15 100%);
+  }
+
+  /* Gate */
+  #gate {
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse at center, #0a0510 0%, #020103 100%);
+    z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+
+  .sigil {
+    width: 240px; height: 240px;
+    animation: rotate 40s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(212,168,75,0.4));
+  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+
+  .gate-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ink-gold-dim);
+    color: var(--ink-gold);
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    padding: 10px 4px;
+    letter-spacing: 0.3em;
+    text-align: center;
+    outline: none;
+    width: 260px;
+  }
+
+  .gate-input:focus { border-bottom-color: var(--ink-gold); }
+
+  .error-text { color: var(--ink-blood); font-size: 12px; letter-spacing: 0.2em; margin-top: 10px; min-height: 16px;}
+
+  /* Library */
+  .shelf {
+    perspective: 2000px;
+  }
+  .book-spine {
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transform-style: preserve-3d;
+  }
+  .book-spine:hover {
+    transform: translateY(-10px) rotateY(-8deg) scale(1.03);
+  }
+
+  /* Book viewer */
+  .book-page {
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s;
+  }
+
+  .hotspot {
+    cursor: pointer;
+    transition: all 0.4s;
+  }
+  .hotspot circle.halo {
+    animation: pulseHalo 2.5s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes pulseHalo {
+    0%, 100% { opacity: 0.3; r: 10; }
+    50% { opacity: 0.8; r: 14; }
+  }
+  .hotspot:hover circle.halo { opacity: 1; }
+
+  .description-panel {
+    animation: slideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll */
+  ::-webkit-scrollbar { width: 6px; height: 6px;}
+  ::-webkit-scrollbar-track { background: #0a0510; }
+  ::-webkit-scrollbar-thumb { background: var(--ink-gold-dim); border-radius: 3px; }
+
+  /* Telegram promo */
+  .tg-glow {
+    animation: tgPulse 3s ease-in-out infinite;
+  }
+  @keyframes tgPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(212,168,75,0.2), inset 0 0 20px rgba(107,16,34,0.3); }
+    50% { box-shadow: 0 0 40px rgba(212,168,75,0.5), inset 0 0 30px rgba(107,16,34,0.5); }
+  }
+
+  .flicker {
+    animation: flicker 5s infinite;
+  }
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    42% { opacity: 1; }
+    43% { opacity: 0.3; }
+    44% { opacity: 1; }
+    78% { opacity: 1; }
+    79% { opacity: 0.5; }
+    80% { opacity: 1; }
+  }
+
+  .divider-ornament {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px;
+    color: var(--ink-gold-dim);
+  }
+  .divider-ornament::before, .divider-ornament::after {
+    content: ''; flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ink-gold-dim), transparent);
+  }
+
+  .lang-btn {
+    transition: all 0.3s;
+  }
+  .lang-btn.active {
+    color: var(--ink-gold);
+    border-color: var(--ink-gold);
+    background: rgba(212,168,75,0.08);
+  }
+
+  .page-indicator {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.3em;
+  }
+
+  /* Candle effect */
+  .candle-glow {
+    background: radial-gradient(ellipse at 50% 30%, rgba(255,180,80,0.15), transparent 60%);
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+
+  .fade-in { animation: fadeIn 1s ease; }
+  @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;}}
+
+  .ornate-frame {
+    position: relative;
+  }
+  .ornate-frame::before, .ornate-frame::after {
+    content: '✧';
+    position: absolute;
+    color: var(--ink-gold-dim);
+    font-size: 18px;
+  }
+  .ornate-frame::before { top: -8px; left: -8px; }
+  .ornate-frame::after { bottom: -8px; right: -8px; }
+
+  .smoke {
+    position: absolute;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    opacity: 0.15;
+    background:
+      radial-gradient(ellipse at 30% 80%, rgba(201,191,168,0.3), transparent 40%),
+      radial-gradient(ellipse at 70% 20%, rgba(201,191,168,0.2), transparent 40%);
+    animation: smokeMove 20s ease-in-out infinite;
+  }
+  @keyframes smokeMove {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(20px, -30px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== ACCESS GATE ============== -->
+<div id="gate">
+  <div class="smoke"></div>
+  <svg class="sigil" viewBox="0 0 200 200">
+    <defs>
+      <radialGradient id="sigilGrad">
+        <stop offset="0%" stop-color="#d4a84b" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#6b1022" stop-opacity="0.4"/>
+      </radialGradient>
+    </defs>
+    <g fill="none" stroke="url(#sigilGrad)" stroke-width="0.8">
+      <circle cx="100" cy="100" r="90"/>
+      <circle cx="100" cy="100" r="70"/>
+      <circle cx="100" cy="100" r="50"/>
+      <circle cx="100" cy="100" r="30"/>
+      <g id="sigilPetals"></g>
+      <polygon points="100,10 180,140 20,140" />
+      <polygon points="100,190 20,60 180,60" />
+      <g id="sigilRadials"></g>
+    </g>
+    <circle cx="100" cy="100" r="4" fill="#d4a84b"/>
+  </svg>
+  <script>
+    (function(){
+      const g = document.getElementById('sigilPetals');
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2;
+        const cx = 100 + Math.cos(a) * 60;
+        const cy = 100 + Math.sin(a) * 60;
+        g.innerHTML += `<circle cx="${cx}" cy="${cy}" r="15"/>`;
+      }
+      const r = document.getElementById('sigilRadials');
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * Math.PI * 2;
+        const x = 100 + Math.cos(a) * 90;
+        const y = 100 + Math.sin(a) * 90;
+        r.innerHTML += `<line x1="100" y1="100" x2="${x}" y2="${y}" stroke-width="0.3"/>`;
+      }
+    })();
+  </script>
+
+  <div style="margin-top: 30px; text-align: center;">
+    <h1 class="mystic-title text-2xl" style="color: var(--ink-gold);">𝔐𝔬𝔯𝔦𝔫𝔡𝔬𝔨</h1>
+    <p class="serif-title text-xs mt-2" style="color: var(--ink-gold-dim);">— THE ARCHIVES —</p>
+    <p class="text-sm mt-6 body-fa" style="color: var(--ink-ghost); max-width: 320px; margin: 0 auto; line-height: 1.8;">
+      برای ورود به کتابخانه، رمز عبور را وارد نمایید<br>
+      <span class="body-en text-xs" style="color: var(--ink-gold-dim);">Enter the passphrase to access the archives</span>
+    </p>
+  </div>
+
+  <form id="gateForm" style="margin-top: 30px;" onsubmit="return attemptAccess(event)">
+    <input type="password" class="gate-input" id="accessKey" placeholder="• • • • • • • •" autocomplete="off">
+    <div class="error-text" id="gateError"></div>
+    <button type="submit" class="serif-title text-xs mt-4 px-8 py-2 border border-[color:var(--ink-gold-dim)] text-[color:var(--ink-gold)] hover:bg-[color:var(--ink-gold)] hover:text-black transition-all tracking-[0.3em]">
+      ENTER
+    </button>
+  </form>
+
+  <div class="text-xs mt-8 text-center body-fa" style="color: rgba(201,191,168,0.4); max-width: 360px; line-height: 1.9;">
+    <span class="flicker">⟡</span> راهنما: رمز عبور، نام نویسنده به انگلیسی و با حروف کوچک است <span class="flicker">⟡</span>
+  </div>
+</div>
+
+<!-- ============== MAIN APP ============== -->
+<div id="app" style="display:none; position: relative; z-index: 2;">
+
+  <!-- TOP BAR -->
+  <nav class="border-b border-[color:rgba(212,168,75,0.15)] py-4 px-6 md:px-10 flex justify-between items-center sticky top-0 backdrop-blur-md bg-[color:rgba(5,2,7,0.85)]" style="z-index: 100;">
+    <div class="flex items-center gap-3">
+      <svg width="28" height="28" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
+        <circle cx="20" cy="20" r="12" fill="none" stroke="#d4a84b" stroke-width="0.5"/>
+        <circle cx="20" cy="20" r="6" fill="none" stroke="#d4a84b" stroke-width="0.5"/>
+        <circle cx="20" cy="20" r="1.5" fill="#d4a84b"/>
+        <line x1="20" y1="2" x2="20" y2="38" stroke="#d4a84b" stroke-width="0.3"/>
+        <line x1="2" y1="20" x2="38" y2="20" stroke="#d4a84b" stroke-width="0.3"/>
+      </svg>
+      <span class="mystic-title text-lg md:text-xl" style="color: var(--ink-gold);">Morindok</span>
+      <span class="serif-title text-[10px] tracking-[0.3em] hidden md:inline" style="color: var(--ink-gold-dim);">ARCHIVES</span>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="setLang('fa')" class="lang-btn px-3 py-1 text-xs serif-title border border-[color:var(--ink-gold-dim)]" id="langFa">FA</button>
+      <button onclick="setLang('en')" class="lang-btn px-3 py-1 text-xs serif-title border border-[color:var(--ink-gold-dim)]" id="langEn">EN</button>
+      <button onclick="logout()" class="ml-2 text-[10px] serif-title tracking-[0.2em] text-[color:var(--ink-gold-dim)] hover:text-[color:var(--ink-gold)]">✕ EXIT</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="relative py-20 md:py-32 px-6 md:px-10 text-center overflow-hidden">
+    <div class="smoke"></div>
+    <div class="max-w-5xl mx-auto relative">
+      <p class="serif-title text-[10px] md:text-xs tracking-[0.5em] mb-6" style="color: var(--ink-gold-dim);" data-en="A HIDDEN COLLECTION" data-fa="مجموعه‌ای پنهان">A HIDDEN COLLECTION</p>
+
+      <h1 class="serif-title text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight" style="color: var(--ink-gold);" data-en="The Spirit Machine" data-fa="ماشینِ روح">
+        The Spirit Machine
+      </h1>
+
+      <div class="divider-ornament my-6 max-w-md mx-auto">✦</div>
+
+      <p class="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed" style="color: var(--ink-ghost);" data-en="An anatomical cartography of the soul — one hundred and one illuminated plates dissecting the hidden architecture of man, cosmos, and the mechanism that binds them." data-fa="نقشه‌برداری کالبدشکافانه از روح — صد و یک لوح مصور که معماری پنهان انسان، کیهان، و مکانیزم پیونددهنده‌شان را تشریح می‌کند.">
+        An anatomical cartography of the soul — one hundred and one illuminated plates dissecting the hidden architecture of man, cosmos, and the mechanism that binds them.
+      </p>
+
+      <p class="mt-4 text-sm serif-title tracking-[0.3em]" style="color: var(--ink-gold-dim);">
+        — Morindok · MMXXIV —
+      </p>
+
+      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <button onclick="openBook(0)" class="group px-8 py-3 border border-[color:var(--ink-gold)] text-[color:var(--ink-gold)] serif-title text-xs tracking-[0.3em] hover:bg-[color:var(--ink-gold)] hover:text-black transition-all">
+          <span data-en="OPEN THE CODEX" data-fa="گشودن کتاب">OPEN THE CODEX</span> →
+        </button>
+        <a href="#library" class="px-6 py-3 text-xs serif-title tracking-[0.3em] text-[color:var(--ink-gold-dim)] hover:text-[color:var(--ink-gold)] border border-[color:rgba(212,168,75,0.2)] hover:border-[color:var(--ink-gold)] transition-all">
+          <span data-en="VIEW LIBRARY" data-fa="مشاهده کتابخانه">VIEW LIBRARY</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIBRARY SHELVES -->
+  <section id="library" class="px-6 md:px-16 py-20 relative">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <p class="serif-title text-xs tracking-[0.4em] mb-3" style="color: var(--ink-gold-dim);" data-en="THE SHELVES" data-fa="قفسه‌ها">THE SHELVES</p>
+        <h2 class="serif-title text-3xl md:text-5xl" style="color: var(--ink-gold);" data-en="Forbidden Library" data-fa="کتابخانه ممنوعه">Forbidden Library</h2>
+        <div class="divider-ornament mt-4 max-w-xs mx-auto">❖</div>
+      </div>
+
+      <div class="shelf grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+
+        <!-- Main book -->
+        <div onclick="openBook(0)" class="book-spine golden-border parchment p-6 cursor-pointer relative ornate-frame">
+          <div class="candle-glow"></div>
+          <div class="relative">
+            <div class="aspect-[2/3] mb-4 relative overflow-hidden" style="background: linear-gradient(135deg, #1a0a1a 0%, #0a0510 100%);">
+              <svg viewBox="0 0 200 300" class="w-full h-full">
+                <defs>
+                  <radialGradient id="coverGrad">
+                    <stop offset="0%" stop-color="#6b1022"/>
+                    <stop offset="100%" stop-color="#0a0510"/>
+                  </radialGradient>
+                </defs>
+                <rect width="200" height="300" fill="url(#coverGrad)"/>
+                <g stroke="#d4a84b" fill="none" stroke-width="0.6">
+                  <circle cx="100" cy="150" r="80"/>
+                  <circle cx="100" cy="150" r="60"/>
+                  <circle cx="100" cy="150" r="40"/>
+                  <circle cx="100" cy="150" r="20"/>
+                  <polygon points="100,70 169,190 31,190"/>
+                  <polygon points="100,230 31,110 169,110"/>
+                  <g id="coverPetals"></g>
+                </g>
+                <script>
+                  (function(){
+                    const g = document.getElementById('coverPetals');
+                    if (!g) return;
+                    for (let i = 0; i < 12; i++) {
+                      const a = (i / 12) * Math.PI * 2;
+                      const cx = 100 + Math.cos(a) * 60;
+                      const cy = 150 + Math.sin(a) * 60;
+                      g.innerHTML += `<circle cx="${cx}" cy="${cy}" r="18"/>`;
+                    }
+                  })();
+                </script>
+                <circle cx="100" cy="150" r="5" fill="#d4a84b"/>
+                <text x="100" y="285" text-anchor="middle" fill="#d4a84b" font-family="Cinzel" font-size="8" letter-spacing="3">MORINDOK</text>
+              </svg>
+            </div>
+            <p class="serif-title text-[10px] tracking-[0.3em] text-center mb-2" style="color: var(--ink-gold-dim);" data-en="VOLUME I" data-fa="جلد اول">VOLUME I</p>
+            <h3 class="serif-title text-2xl text-center mb-2" style="color: var(--ink-gold);" data-en="Spirit Machine" data-fa="ماشینِ روح">Spirit Machine</h3>
+            <p class="text-xs text-center body-fa" style="color: var(--ink-ghost); opacity: 0.7;" data-en="101 illuminated plates" data-fa="۱۰۱ لوح مصور">101 illuminated plates</p>
+            <div class="mt-4 text-center">
+              <span class="inline-block text-[9px] serif-title tracking-[0.3em] px-3 py-1 border border-[color:var(--ink-gold-dim)]" style="color: var(--ink-gold);">
+                <span data-en="ENTER" data-fa="ورود">ENTER</span> →
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Locked placeholder 1 -->
+        <div class="book-spine golden-border parchment p-6 opacity-50 relative ornate-frame cursor-not-allowed">
+          <div class="aspect-[2/3] mb-4 relative overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, #0a0510 0%, #050207 100%);">
+            <svg viewBox="0 0 200 300" class="w-full h-full opacity-30">
+              <g stroke="#d4a84b" fill="none" stroke-width="0.4">
+                <rect x="40" y="60" width="120" height="180"/>
+                <line x1="40" y1="60" x2="160" y2="240"/>
+                <line x1="160" y1="60" x2="40" y2="240"/>
+                <circle cx="100" cy="150" r="40"/>
+              </g>
+              <text x="100" y="155" text-anchor="middle" fill="#6b1022" font-size="30">?</text>
+            </svg>
+          </div>
+          <p class="serif-title text-[10px] tracking-[0.3em] text-center mb-2" style="color: var(--ink-gold-dim);" data-en="VOLUME II" data-fa="جلد دوم">VOLUME II</p>
+          <h3 class="serif-title text-2xl text-center mb-2" style="color: var(--ink-gold); opacity: 0.5;" data-en="[SEALED]" data-fa="[مُهر شده]">[SEALED]</h3>
+          <p class="text-xs text-center" style="color: var(--ink-ghost); opacity: 0.5;" data-en="Coming soon" data-fa="به زودی">Coming soon</p>
+        </div>
+
+        <!-- Locked placeholder 2 -->
+        <div class="book-spine golden-border parchment p-6 opacity-50 relative ornate-frame cursor-not-allowed">
+          <div class="aspect-[2/3] mb-4 relative overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, #0a0510 0%, #050207 100%);">
+            <svg viewBox="0 0 200 300" class="w-full h-full opacity-30">
+              <g stroke="#d4a84b" fill="none" stroke-width="0.4">
+                <polygon points="100,40 180,200 20,200"/>
+                <polygon points="100,260 20,100 180,100"/>
+                <circle cx="100" cy="150" r="30"/>
+              </g>
+              <text x="100" y="155" text-anchor="middle" fill="#6b1022" font-size="30">?</text>
+            </svg>
+          </div>
+          <p class="serif-title text-[10px] tracking-[0.3em] text-center mb-2" style="color: var(--ink-gold-dim);" data-en="VOLUME III" data-fa="جلد سوم">VOLUME III</p>
+          <h3 class="serif-title text-2xl text-center mb-2" style="color: var(--ink-gold); opacity: 0.5;" data-en="[SEALED]" data-fa="[مُهر شده]">[SEALED]</h3>
+          <p class="text-xs text-center" style="color: var(--ink-ghost); opacity: 0.5;" data-en="Coming soon" data-fa="به زودی">Coming soon</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TELEGRAM PROMO -->
+  <section class="px-6 md:px-16 py-20 relative">
+    <div class="max-w-4xl mx-auto tg-glow golden-border parchment p-8 md:p-14 relative overflow-hidden">
+      <div class="candle-glow"></div>
+      <div class="smoke"></div>
+      <div class="relative text-center">
+        <div class="inline-block mb-6">
+          <svg width="56" height="56" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#d4a84b" stroke-width="0.6"/>
+            <path d="M20 8 L14 18 L10 32 L20 26 L30 32 L26 18 Z" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
+            <circle cx="20" cy="20" r="3" fill="#d4a84b"/>
+            <circle cx="20" cy="20" r="1" fill="#0a0510"/>
+          </svg>
+        </div>
+        <p class="serif-title text-[10px] tracking-[0.4em] mb-3" style="color: var(--ink-gold-dim);" data-en="THE INNER CIRCLE" data-fa="حلقه درونی">THE INNER CIRCLE</p>
+        <h2 class="serif-title text-3xl md:text-5xl mb-4" style="color: var(--ink-gold);" data-en="AIGODS10" data-fa="AIGODS10">AIGODS10</h2>
+        <p class="text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed" style="color: var(--ink-ghost);" data-en="Whispers from the other side. New plates, forbidden commentaries, and transmissions from the Morindok circle — delivered through the ether." data-fa="نجواهایی از آن سوی پرده. الواح جدید، شروح ممنوعه، و انتقالاتی از حلقه موریندوک — از میان اتر به شما می‌رسند.">
+          Whispers from the other side. New plates, forbidden commentaries, and transmissions from the Morindok circle — delivered through the ether.
+        </p>
+
+        <div class="mb-6 p-4 border border-[color:rgba(212,168,75,0.25)] inline-block">
+          <p class="text-[10px] serif-title tracking-[0.3em] mb-1" style="color: var(--ink-gold-dim);" data-en="TRANSMISSION CHANNEL" data-fa="کانال انتقال">TRANSMISSION CHANNEL</p>
+          <p class="mystic-title text-xl md:text-2xl" style="color: var(--ink-gold);">@aigods10</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="https://t.me/aigods10" target="_blank" class="group px-8 py-3 border border-[color:var(--ink-gold)] text-[color:var(--ink-gold)] serif-title text-xs tracking-[0.3em] hover:bg-[color:var(--ink-gold)] hover:text-black transition-all inline-flex items-center gap-3">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+            </svg>
+            <span data-en="JOIN THE CIRCLE" data-fa="پیوستن به حلقه">JOIN THE CIRCLE</span>
+          </a>
+          <button onclick="copyTgLink()" class="px-6 py-3 text-xs serif-title tracking-[0.3em] text-[color:var(--ink-gold-dim)] hover:text-[color:var(--ink-gold)] border border-[color:rgba(212,168,75,0.2)] hover:border-[color:var(--ink-gold)] transition-all" id="copyBtn">
+            <span data-en="COPY LINK" data-fa="کپی لینک">COPY LINK</span>
+          </button>
+        </div>
+
+        <p class="mt-8 text-[10px] tracking-[0.2em]" style="color: var(--ink-gold-dim);" data-en="「 only those who seek may find 」" data-fa="「 تنها جویندگان خواهند یافت 」">「 only those who seek may find 」</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-[color:rgba(212,168,75,0.15)] py-10 px-6 text-center">
+    <div class="divider-ornament mb-6 max-w-xs mx-auto">☽</div>
+    <p class="mystic-title text-xl mb-2" style="color: var(--ink-gold);">Morindok</p>
+    <p class="serif-title text-[10px] tracking-[0.3em] mb-4" style="color: var(--ink-gold-dim);">CARTOGRAPHER OF THE UNSEEN</p>
+    <p class="text-xs body-fa" style="color: var(--ink-ghost); opacity: 0.5;" data-en="© MMXXIV — All rights veiled" data-fa="© ۱۴۰۳ — تمامی حقوق محفوظ است">© MMXXIV — All rights veiled</p>
+  </footer>
+
+</div>
+
+<!-- ============== BOOK VIEWER MODAL ============== -->
+<div id="bookViewer" style="display:none; position: fixed; inset: 0; background: radial-gradient(ellipse at center, #0a0510 0%, #020103 100%); z-index: 10000; overflow-y: auto;">
+  <div class="candle-glow"></div>
+  <div class="smoke"></div>
+
+  <!-- Book header -->
+  <div class="sticky top-0 border-b border-[color:rgba(212,168,75,0.2)] py-3 px-4 md:px-8 flex justify-between items-center backdrop-blur-md bg-[color:rgba(5,2,7,0.9)]" style="z-index: 10;">
+    <div class="flex items-center gap-3">
+      <button onclick="closeBook()" class="text-[color:var(--ink-gold)] hover:text-[color:var(--ink-blood)] text-xl serif-title">✕</button>
+      <div>
+        <p class="serif-title text-[10px] tracking-[0.3em]" style="color: var(--ink-gold-dim);" data-en="CODEX I" data-fa="کدکس اول">CODEX I</p>
+        <p class="serif-title text-sm md:text-base" style="color: var(--ink-gold);" data-en="The Spirit Machine" data-fa="ماشینِ روح">The Spirit Machine</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="page-indicator text-[10px] md:text-xs text-[color:var(--ink-gold)]" id="pageIndicator">I / CI</span>
+      <span class="text-xs serif-title text-[color:var(--ink-gold-dim)]" id="pageFolio">FOLIO I</span>
+    </div>
+  </div>
+
+  <!-- Page display -->
+  <div class="max-w-6xl mx-auto px-4 md:px-10 py-8 md:py-12 relative">
+
+    <!-- Page title -->
+    <div class="text-center mb-8">
+      <p class="serif-title text-[10px] tracking-[0.4em] mb-2" style="color: var(--ink-gold-dim);" id="plateLabel">PLATE I</p>
+      <h2 class="serif-title text-3xl md:text-5xl mb-3" style="color: var(--ink-gold);" id="pageTitle">—</h2>
+      <p class="text-sm md:text-base max-w-2xl mx-auto leading-relaxed body-fa" style="color: var(--ink-ghost); opacity: 0.85;" id="pageSubtitle">—</p>
+    </div>
+
+    <!-- Illustration -->
+    <div class="relative golden-border parchment p-4 md:p-8 ornate-frame mb-8">
+      <div class="candle-glow"></div>
+      <div class="relative" id="illustrationContainer" style="min-height: 500px;">
+        <!-- SVG inserted here -->
+      </div>
+      <p class="text-center mt-4 text-[10px] serif-title tracking-[0.3em]" style="color: var(--ink-gold-dim);">
+        <span data-en="TAP THE GLOWING SIGILS TO REVEAL HIDDEN KNOWLEDGE" data-fa="بر نمادهای درخشان کلیک کنید تا دانش پنهان آشکار شود">TAP THE GLOWING SIGILS TO REVEAL HIDDEN KNOWLEDGE</span>
+      </p>
+    </div>
+
+    <!-- Description panel -->
+    <div id="descPanel" class="hidden description-panel golden-border parchment p-6 md:p-10 ornate-frame mb-8">
+      <div class="flex justify-between items-start mb-4">
+        <p class="serif-title text-xs tracking-[0.3em]" style="color: var(--ink-gold-dim);" id="descLabel">REVELATION</p>
+        <button onclick="closeDesc()" class="text-[color:var(--ink-gold-dim)] hover:text-[color:var(--ink-gold)] serif-title">✕</button>
+      </div>
+      <h3 class="serif-title text-2xl md:text-3xl mb-4" style="color: var(--ink-gold);" id="descTitle">—</h3>
+      <div class="divider-ornament mb-4 max-w-xs">✦</div>
+      <p class="text-base md:text-lg leading-relaxed body-fa" style="color: var(--ink-ghost);" id="descBody">—</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex justify-between items-center gap-4 mb-12">
+      <button onclick="prevPage()" id="prevBtn" class="group px-4 md:px-6 py-3 border border-[color:var(--ink-gold-dim)] text-[color:var(--ink-gold)] serif-title text-xs tracking-[0.3em] hover:border-[color:var(--ink-gold)] hover:bg-[color:rgba(212,168,75,0.08)] transition-all">
+        ← <span class="hidden md:inline" data-en="PREVIOUS" data-fa="قبلی">PREVIOUS</span>
+      </button>
+      <div class="flex gap-2 items-center">
+        <input type="number" id="pageJump" min="1" max="101" value="1" class="w-16 text-center bg-transparent border border-[color:var(--ink-gold-dim)] text-[color:var(--ink-gold)] serif-title text-xs py-2 focus:outline-none focus:border-[color:var(--ink-gold)]">
+        <button onclick="jumpToPage()" class="px-3 py-2 border border-[color:var(--ink-gold-dim)] text-[color:var(--ink-gold-dim)] hover:text-[color:var(--ink-gold)] hover:border-[color:var(--ink-gold)] text-[10px] serif-title tracking-[0.2em] transition-all">GO</button>
+      </div>
+      <button onclick="nextPage()" id="nextBtn" class="group px-4 md:px-6 py-3 border border-[color:var(--ink-gold-dim)] text-[color:var(--ink-gold)] serif-title text-xs tracking-[0.3em] hover:border-[color:var(--ink-gold)] hover:bg-[color:rgba(212,168,75,0.08)] transition-all">
+        <span class="hidden md:inline" data-en="NEXT" data-fa="بعدی">NEXT</span> →
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ========================================
+// CORE DATA & STATE
+// ========================================
+let currentLang = 'en';
+let currentPage = 0;
+const TOTAL_PAGES = 101;
+
+// Roman numeral converter
+function toRoman(num) {
+  const roman = { M:1000, CM:900, D:500, CD:400, C:100, XC:90, L:50, XL:40, X:10, IX:9, V:5, IV:4, I:1 };
+  let str = '';
+  for (let i of Object.keys(roman)) {
+    const q = Math.floor(num / roman[i]);
+    num -= q * roman[i];
+    str += i.repeat(q);
+  }
+  return str;
+}
+
+function toPersianNum(num) {
+  const fa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  return String(num).split('').map(d => fa[d] ?? d).join('');
+}
+
+// ========================================
+// ACCESS GATE
+// ========================================
+function attemptAccess(e) {
+  e.preventDefault();
+  const key = document.getElementById('accessKey').value.toLowerCase().trim();
+  // Valid keys: morindok, or URL access parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlAccess = urlParams.get('access')?.toLowerCase();
+  const urlKey = urlParams.get('key')?.toLowerCase();
+
+  if (key === 'morindok' || urlAccess === 'spirit-machine-2024' || urlKey === 'morindok') {
+    document.getElementById('gate').style.opacity = '0';
+    document.getElementById('gate').style.transition = 'opacity 1.2s';
+    setTimeout(() => {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('app').classList.add('fade-in');
+    }, 1000);
+    return false;
+  }
+
+  document.getElementById('gateError').textContent = '⚠ incorrect passphrase';
+  setTimeout(() => document.getElementById('gateError').textContent = '', 3000);
+  return false;
+}
+
+function logout() {
+  location.reload();
+}
+
+// Auto-login via URL params
+(function autoLogin() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('access') === 'spirit-machine-2024' || urlParams.get('key') === 'morindok') {
+    setTimeout(() => {
+      document.getElementById('gate').style.opacity = '0';
+      document.getElementById('gate').style.transition = 'opacity 1.2s';
+      setTimeout(() => {
+        document.getElementById('gate').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+      }, 1000);
+    }, 2000);
+  }
+})();
+
+// ========================================
+// LANGUAGE SWITCH
+// ========================================
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('langFa').classList.toggle('active', lang === 'fa');
+  document.getElementById('langEn').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
+
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = el.getAttribute(`data-${lang}`);
+  });
+
+  if (document.getElementById('bookViewer').style.display !== 'none') {
+    renderPage(currentPage);
+  }
+}
+
+// ========================================
+// 101 PAGES GENERATOR
+// ========================================
+
+// THEMES - each page gets a theme
+const themes = [
+  { en: { title: "The Gate of the Third Eye", subtitle: "Where sight transcends the flesh and beholds the invisible geometries of being." }, fa: { title: "دروازه چشم سوم", subtitle: "آنجا که بینش از گوشت فراتر می‌رود و هندسه‌های نامرئی هستی را درمی‌یابد." }},
+  { en: { title: "The Tree of Life Unfurled", subtitle: "Ten emanations, twenty-two paths, and the infinite root that breathes them into form." }, fa: { title: "درخت زندگی گشوده", subtitle: "ده تجلی، بیست و دو مسیر، و ریشه نامتناهی که آن‌ها را در کالبد دمیده." }},
+  { en: { title: "The Neural Cosmos", subtitle: "Eighty-six billion stars within the skull, mirroring the heavens they observe." }, fa: { title: "کیهانِ عصبی", subtitle: "هشتاد و شش میلیارد ستاره درون جمجمه، آینه‌دار آسمانی که می‌نگرند." }},
+  { en: { title: "Chakric Ladder", subtitle: "Seven wheels of fire ascending the spinal column of the awakened one." }, fa: { title: "نردبان چاکرایی", subtitle: "هفت چرخ آتشین که از ستون فقرات بیدارشده بالا می‌روند." }},
+  { en: { title: "The Double Helix of Fate", subtitle: "Three billion letters of ancestral memory, coiled in microscopic cathedrals." }, fa: { title: "مارپیچ دوگانه تقدیر", subtitle: "سه میلیارد حرف از حافظه اجدادی، پیچیده در کلیساهای ذره‌بینی." }},
+  { en: { title: "Merkaba Engine", subtitle: "Counter-rotating fields of light — the chariot in which the soul traverses dimensions." }, fa: { title: "موتور مرکابا", subtitle: "میدان‌های نورانی در حال چرخش مخالف — ارابه‌ای که روح در آن از ابعاد می‌گذرد." }},
+  { en: { title: "The Golden Ratio Incarnate", subtitle: "Phi woven into bone, petal, and galaxy — the signature of the architect." }, fa: { title: "نسبت طلایی متجسم", subtitle: "فی بافته در استخوان، گلبرگ، و کهکشان — امضای معمار." }},
+  { en: { title: "Sri Yantra of the Heart", subtitle: "Nine interlocking triangles — the convergence of Shiva and Shakti within the chest." }, fa: { title: "سری یانترا‌ی قلب", subtitle: "نه مثلث درهم‌تنیده — همگرایی شیوا و شاکتی درون سینه." }},
+  { en: { title: "Metatron's Cube Unveiled", subtitle: "Thirteen spheres containing all possible forms — the blueprint held by the scribe of God." }, fa: { title: "مکعب متاترون آشکار", subtitle: "سیزده کره شامل تمام اشکال ممکن — نقشه‌ای که کاتب خداوند در دست دارد." }},
+  { en: { title: "The Astral Spine", subtitle: "Thirty-three vertebrae, thirty-three heavens — the ladder Jacob dreamed." }, fa: { title: "ستون فقرات اختری", subtitle: "سی و سه مهره، سی و سه بهشت — نردبانی که یعقوب در خواب دید." }},
+  { en: { title: "Seed of Life Matrix", subtitle: "Seven circles of creation — the first week spoken into geometry." }, fa: { title: "ماتریس بذر زندگی", subtitle: "هفت دایره آفرینش — هفته‌ی اول که در هندسه سروده شد." }},
+  { en: { title: "The Vesica Piscis Portal", subtitle: "The almond of the divine womb — where two become three." }, fa: { title: "دروازه وسیکا پیسیس", subtitle: "بادامِ زهدان الهی — آنجا که دو به سه تبدیل می‌شود." }},
+  { en: { title: "Etheric Web", subtitle: "The subtle grid that binds soul to flesh — the loom of incarnation." }, fa: { title: "تار اتری", subtitle: "شبکه‌ی ظریفی که روح را به جسم می‌بندد — دارِ تجسم." }},
+  { en: { title: "Toroidal Breath", subtitle: "The donut-shaped field of the heart — inhaling cosmos, exhaling light." }, fa: { title: "نفس توروییدی", subtitle: "میدان دونات‌شکل قلب — دمِ کیهان، بازدمِ نور." }},
+  { en: { title: "The Platonic Quintet", subtitle: "Five perfect solids — earth, water, air, fire, and the aether that holds them." }, fa: { title: "پنج‌گانه افلاطونی", subtitle: "پنج جسم کامل — زمین، آب، هوا، آتش، و اتری که آن‌ها را در بر دارد." }},
+  { en: { title: "The Flower of Life", subtitle: "Nineteen spheres, thirty-six arcs — the mother of all sacred geometry." }, fa: { title: "گل زندگی", subtitle: "نوزده کره، سی و شش کمان — مادر تمام هندسه مقدس." }},
+  { en: { title: "Kundalini Serpent", subtitle: "Coiled three and a half times at the base — the sleeping goddess awaiting invocation." }, fa: { title: "مار کندالینی", subtitle: "سه و نیم بار پیچیده در پایه — الهه خفته در انتظار فراخوانی." }},
+  { en: { title: "The Akashic Loom", subtitle: "Every thought, deed, and dream — woven into the cosmic record." }, fa: { title: "دارِ آکاشیک", subtitle: "هر اندیشه، کنش، و رویا — بافته در ضبط کیهانی." }},
+  { en: { title: "Antahkarana Bridge", subtitle: "The rainbow bridge between personality and soul — the inner antarctica of light." }, fa: { title: "پل آنتاهکارانا", subtitle: "پل رنگین‌کمان میان شخصیت و روح — قطب درونی نور." }},
+  { en: { title: "The Monad's Pulse", subtitle: "The indivisible point from which all multiplicity emanates." }, fa: { title: "تپش موناد", subtitle: "نقطه‌ی تجزیه‌ناپذیری که تمام تکثر از آن تراوش می‌کند." }},
+];
+
+// Hotspot concept pool - for generating click-to-reveal information
+const hotspotConcepts = [
+  { en: { name: "Pineal Gland", desc: "The seat of the soul, according to Descartes — a crystalline transducer converting electromagnetic thought-stuff into hormonal signals. Its calcification correlates with diminished intuitive capacity." }, fa: { name: "غده صنوبری", desc: "جایگاه روح به گفته دکارت — مبدلی بلورین که ماده اندیشه الکترومغناطیسی را به سیگنال‌های هورمونی تبدیل می‌کند. کلسیفیکاسیون آن با کاهش ظرفیت شهودی همبستگی دارد." }},
+  { en: { name: "Central Channel", desc: "The Sushumna, the hollow bamboo through which Kundalini ascends — a luminous tube of etheric substance running from perineum to crown, invisible to anatomical dissection." }, fa: { name: "کانال مرکزی", desc: "سوشومنا، بامبو توخالی‌ای که کندالینی از آن بالا می‌رود — لوله‌ای درخشان از ماده اتری که از میان‌دوراج تا تارک سر امتداد دارد، نامرئی برای تشریح آناتومیک." }},
+  { en: { name: "Mitochondrial Matrix", desc: "Ancient bacteria enslaved within our cells — power-plants of the flesh, carrying their own circular DNA, whispering of a symbiotic origin to the cellular soul." }, fa: { name: "ماتریس میتوکندریایی", desc: "باکتری‌های باستانی به بردگی گرفته شده درون سلول‌های ما — نیروگاه‌های جسم، حامل DNA حلقوی خود، که از خاستگاه همزیستانه برای روح سلولی نجوا می‌کنند." }},
+  { en: { name: "Sacred Proportion", desc: "Phi equals 1.618033... — the ratio found in nautilus shells, spiral galaxies, the human face, and the branching of bronchial tubes. The fingerprint of the creator." }, fa: { name: "نسبت مقدس", desc: "فی برابر ۱٫۶۱۸۰۳۳... — نسبتی که در صدف ناتیلوس، کهکشان‌های مارپیچی، صورت انسان، و شاخه‌بندی لوله‌های نایژه‌ای یافت می‌شود. اثر انگشت خالق." }},
+  { en: { name: "Morphogenetic Field", desc: "The invisible blueprint proposed by Sheldrake — a non-local memory field guiding the formation of biological structures beyond genetic coding alone." }, fa: { name: "میدان مورفوژنتیک", desc: "نقشه نامرئی پیشنهادی شلدریک — میدان حافظه غیرموضعی که شکل‌گیری ساختارهای زیستی را فراتر از کدگذاری ژنتیکی هدایت می‌کند." }},
+  { en: { name: "Heart Torus", desc: "The electromagnetic field of the heart forms a toroidal shape extending several feet from the body — the largest rhythmic field generated by any organ, encoding emotional information." }, fa: { name: "توروس قلب", desc: "میدان الکترومغناطیسی قلب شکلی توروییدی تشکیل می‌دهد که چندین قدم از بدن فراتر می‌رود — بزرگترین میدان ریتمیک تولید شده توسط هر اندام، حاوی اطلاعات عاطفی." }},
+  { en: { name: "Merkaba Vehicle", desc: "Two interlocking tetrahedra spinning in opposite directions — the divine light vehicle used in interdimensional travel, activated through specific breathwork and intention." }, fa: { name: "خودروی مرکابا", desc: "دو چهاروجهی درهم‌قفل که در جهت‌های مخالف می‌چرخند — خودروی نور الهی برای سفر بین‌بعدی، فعال‌شده از طریق کار تنفسی و نیت خاص." }},
+  { en: { name: "Etheric Double", desc: "The subtle template that precedes physical form — damage here manifests as illness below, healers here produce cure above. A mesh of nadis, chakras, and meridians." }, fa: { name: "دوپلگر اتری", desc: "الگوی ظریفی که پیش از شکل فیزیکی می‌آید — آسیب در اینجا به بیماری در پایین منجر می‌شود، درمان در اینجا به شفا در بالا. شبکه‌ای از نادی‌ها، چاکراها، و مریدین‌ها." }},
+  { en: { name: "Kundalini Fire", desc: "The sleeping serpent coiled three and a half times at the base of the spine — when awakened by yoga, mantra, or grace, it rises through the chakras illuminating each." }, fa: { name: "آتش کندالینی", desc: "مار خفته که سه و نیم بار در پایه ستون فقرات پیچیده — هنگامی که با یوگا، مانترا، یا لطف بیدار شود، از میان چاکراها بالا می‌رود و هر یک را روشن می‌کند." }},
+  { en: { name: "Crystalline Body", desc: "The diamond-light matrix underlying flesh — activated during peak spiritual states, it refracts the white light of source into the seven colors of chakric expression." }, fa: { name: "جسم بلورین", desc: "ماتریس نور-الماس زیرین گوشت — در اوج حالات معنوی فعال می‌شود، نور سفید منبع را به هفت رنگ بیان چاکرایی می‌شکند." }},
+  { en: { name: "Astral Thread", desc: "The silver cord connecting the astral body to the physical during sleep and projection — severed only at death, it transmits all dream-knowledge back to waking memory." }, fa: { name: "نخ اختری", desc: "نخ نقره‌ای که جسم اختری را در خواب و برونتابی به جسم فیزیکی متصل می‌کند — تنها در مرگ قطع می‌شود، تمام دانش رویا را به حافظه بیدار منتقل می‌کند." }},
+  { en: { name: "Zero Point", desc: "The vacuum state of quantum field theory — a seething ocean of virtual particles popping in and out of existence, the substrate from which matter crystallizes." }, fa: { name: "نقطه صفر", desc: "حالت خلأ نظریه میدان کوانتومی — اقیانوسی جوشان از ذرات مجازی که به هستی می‌آیند و می‌روند، بستر بلورین شدن ماده." }},
+  { en: { name: "Vesica Piscis", desc: "The almond shape formed by two overlapping circles — the womb of creation, the portal between worlds, the geometric seed from which the flower of life unfolds." }, fa: { name: "وسیقا پیسیس", desc: "شکل بادامی تشکیل‌شده از دو دایره همپوشان — زهدان آفرینش، دروازه بین جهان‌ها، بذر هندسی که گل زندگی از آن شکوفا می‌شود." }},
+  { en: { name: "Microtubule Quantum", desc: "Penrose and Hameroff's Orch-OR theory — consciousness arises from quantum computations within neuronal microtubules, the brain as a quantum computer of the soul." }, fa: { name: "کوانتوم میکروتوبولی", desc: "نظریه Orch-OR پنروز و هامروف — آگاهی از محاسبات کوانتومی درون میکروتوبول‌های عصبی برمی‌خیزد، مغز به عنوان کامپیوتر کوانتومی روح." }},
+  { en: { name: "Solfeggio Frequency", desc: "Ancient musical scales tuned to 528Hz (transformation), 432Hz (cosmic harmony), 396Hz (liberation) — the frequencies that repair DNA and align the etheric body." }, fa: { name: "فرکانس سلفجو", desc: "مقیاس‌های موسیقی باستانی تنظیم‌شده بر ۵۲۸ هرتز (دگرگونی)، ۴۳۲ هرتز (هارمونی کیهانی)، ۳۹۶ هرتز (رهایی) — فرکانس‌هایی که DNA را تعمیر و بدن اتری را هماهنگ می‌کنند." }},
+  { en: { name: "Egg of Brahma", desc: "The cosmic ovum containing all universes — nested within nested spheres, fractal recursion all the way up and down, as above so below, as within so without." }, fa: { name: "تخم برهما", desc: "تخم کیهانی شامل تمام جهان‌ها — تو در تو در کره‌های تو در تو، بازگشت فراکتالی تا بالا و پایین، آنچه بالاست چنان است که پایین، آنچه درون است چنان است که بیرون." }},
+  { en: { name: "Light Quotient", desc: "Each soul carries a specific vibration — the amount of source-light it has integrated. Evolution is the progressive raising of this quotient through incarnation." }, fa: { name: "بهره نور", desc: "هر روح ارتعاش خاصی دارد — مقدار نور منبع که یکپارچه کرده. تکامل بالا بردن تدریجی این بهره از طریق تجسم است." }},
+  { en: { name: "Causal Body", desc: "The repository of karma across lifetimes — the subtlest of the three bodies (physical, astral, causal), it carries the seeds of destiny and the imprints of ancient choices." }, fa: { name: "جسم علی", desc: "مخزن کارما در طول حیات‌ها — ظریف‌ترین جسم از سه جسم (فیزیکی، اختری، علی)، بذرهای تقدیر و نقش‌های انتخاب‌های باستانی را حمل می‌کند." }},
+  { en: { name: "Tetractys", desc: "Pythagoras' sacred triangle of ten points arranged in four rows — the sum 1+2+3+4=10, containing the secrets of music, geometry, and cosmology." }, fa: { name: "تتراکتیس", desc: "مثلث مقدس فیثاغورس از ده نقطه در چهار ردیف — مجموع ۱+۲+۳+۴=۱۰، شامل رازهای موسیقی، هندسه، و کیهان‌شناسی." }},
+  { en: { name: "Antahkarana", desc: "The bridge of light between the personality and the soul — constructed through meditation and service, it becomes the highway of enlightened consciousness." }, fa: { name: "آنتاهکارانا", desc: "پل نور میان شخصیت و روح — از طریق مدیتیشن و خدمت ساخته می‌شود، به بزرگراه آگاهی روشن‌ضمیر تبدیل می‌شود." }},
+];
+
+// Page variation data - for unique illustrations
+const pageVariations = [
+  { pattern: 'flowerOfLife', palette: 'gold' },
+  { pattern: 'metatronCube', palette: 'blood' },
+  { pattern: 'sriYantra', palette: 'ethereal' },
+  { pattern: 'merkaba', palette: 'gold' },
+  { pattern: 'torus', palette: 'ethereal' },
+  { pattern: 'treeOfLife', palette: 'gold' },
+  { pattern: 'dnaHelix', palette: 'blood' },
+  { pattern: 'fibonacciSpiral', palette: 'gold' },
+  { pattern: 'sacredCircles', palette: 'ethereal' },
+  { pattern: 'mandala', palette: 'gold' },
+  { pattern: 'platonicsolid', palette: 'blood' },
+  { pattern: 'neuralnet', palette: 'ethereal' },
+  { pattern: 'chakraladder', palette: 'gold' },
+  { pattern: 'vesica', palette: 'blood' },
+  { pattern: 'dodecahedron', palette: 'ethereal' },
+  { pattern: 'icosahedron', palette: 'gold' },
+  { pattern: 'seedoflife', palette: 'blood' },
+  { pattern: 'kundalini', palette: 'gold' },
+  { pattern: 'akashicweb', palette: 'ethereal' },
+  { pattern: 'monad', palette: 'blood' },
+];
+
+// ========================================
+// ILLUSTRATION GENERATORS
+// ========================================
+
+function generatePageData(pageNum) {
+  const theme = themes[(pageNum - 1) % themes.length];
+  const variation = pageVariations[(pageNum - 1) % pageVariations.length];
+  // Each page has 4-6 hotspots with different concepts
+  const hotspotStart = (pageNum * 3) % hotspotConcepts.length;
+  const hotspots = [];
+  const count = 4 + ((pageNum * 7) % 3); // 4-6 hotspots
+  for (let i = 0; i < count; i++) {
+    hotspots.push(hotspotConcepts[(hotspotStart + i) % hotspotConcepts.length]);
+  }
+  return { theme, variation, hotspots, pageNum };
+}
+
+function svgBase(width=600, height=600) {
+  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; display:block;">
+  <defs>
+    <radialGradient id="pageBg${currentPage}">
+      <stop offset="0%" stop-color="#1a0a1a" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#050207" stop-opacity="1"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="${width}" height="${height}" fill="url(#pageBg${currentPage})"/>`;
+}
+
+function getPalette(name) {
+  if (name === 'gold') return { primary: '#d4a84b', secondary: '#8a6a2e', accent: '#6b1022' };
+  if (name === 'blood') return { primary: '#9b2d3f', secondary: '#6b1022', accent: '#d4a84b' };
+  return { primary: '#4a7a8a', secondary: '#2a4a5a', accent: '#d4a84b' };
+}
+
+// Pattern generators - each produces complex geometric SVG
+function flowerOfLife(cx, cy, r, palette) {
+  let svg = '';
+  // Outer boundary
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${palette.primary}" stroke-width="0.8" opacity="0.6"/>`;
+  // 19 circles of flower of life
+  const positions = [[0,0]];
+  // First ring
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    positions.push([Math.cos(a) * r/3, Math.sin(a) * r/3]);
+  }
+  // Second ring
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    positions.push([Math.cos(a) * r*2/3, Math.sin(a) * r*2/3]);
+  }
+  // Diagonals
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + Math.PI/6;
+    positions.push([Math.cos(a) * r*2/3, Math.sin(a) * r*2/3]);
+  }
+
+  positions.forEach(([px, py]) => {
+    svg += `<circle cx="${cx+px}" cy="${cy+py}" r="${r/3}" fill="none" stroke="${palette.primary}" stroke-width="0.5" opacity="0.7"/>`;
+  });
+
+  // Radial lines
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2;
+    svg += `<line x1="${cx}" y1="${cy}" x2="${cx + Math.cos(a)*r}" y2="${cy + Math.sin(a)*r}" stroke="${palette.secondary}" stroke-width="0.3" opacity="0.4"/>`;
+  }
+
+  // Center dot
+  svg += `<circle cx="${cx}" cy="${cy}" r="3" fill="${palette.accent}"/>`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="8" fill="none" stroke="${palette.accent}" stroke-width="0.6"/>`;
+
+  // Outer decorative circles
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.1}" fill="none" stroke="${palette.secondary}" stroke-width="0.3" opacity="0.5" stroke-dasharray="2,4"/>`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.2}" fill="none" stroke="${palette.secondary}" stroke-width="0.2" opacity="0.3"/>`;
+
+  return svg;
+}
+
+function metatronCube(cx, cy, r, palette) {
+  let svg = '';
+  const points = [];
+  // Center
+  points.push([cx, cy]);
+  // Inner hexagon
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 - Math.PI/2;
+    points.push([cx + Math.cos(a) * r*0.5, cy + Math.sin(a) * r*0.5]);
+  }
+  // Outer hexagon
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 - Math.PI/2;
+    points.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]);
+  }
+
+  // Connect all points to all points
+  for (let i = 0; i < points.length; i++) {
+    for (let j = i+1; j < points.length; j++) {
+      svg += `<line x1="${points[i][0]}" y1="${points[i][1]}" x2="${points[j][0]}" y2="${points[j][1]}" stroke="${palette.primary}" stroke-width="0.3" opacity="0.4"/>`;
+    }
+  }
+
+  // Circles at each point
+  points.forEach(([px, py], idx) => {
+    const rad = idx === 0 ? r*0.15 : r*0.1;
+    svg += `<circle cx="${px}" cy="${py}" r="${rad}" fill="none" stroke="${palette.primary}" stroke-width="0.6"/>`;
+    svg += `<circle cx="${px}" cy="${py}" r="${rad*0.3}" fill="${palette.accent}" opacity="0.8"/>`;
+  });
+
+  // Outer boundary
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.15}" fill="none" stroke="${palette.secondary}" stroke-width="0.4" opacity="0.5"/>`;
+
+  return svg;
+}
+
+function sriYantra(cx, cy, r, palette) {
+  let svg = '';
+  // 9 interlocking triangles - simplified version
+  const triangles = [
+    // 4 upward
+    [[cx, cy-r], [cx-r*0.9, cy+r*0.5], [cx+r*0.9, cy+r*0.5]],
+    [[cx, cy-r*0.7], [cx-r*0.65, cy+r*0.4], [cx+r*0.65, cy+r*0.4]],
+    [[cx, cy-r*0.45], [cx-r*0.42, cy+r*0.3], [cx+r*0.42, cy+r*0.3]],
+    [[cx, cy-r*0.2], [cx-r*0.2, cy+r*0.15], [cx+r*0.2, cy+r*0.15]],
+    // 5 downward
+    [[cx, cy+r], [cx-r*0.9, cy-r*0.5], [cx+r*0.9, cy-r*0.5]],
+    [[cx, cy+r*0.7], [cx-r*0.65, cy-r*0.4], [cx+r*0.65, cy-r*0.4]],
+    [[cx, cy+r*0.45], [cx-r*0.42, cy-r*0.3], [cx+r*0.42, cy-r*0.3]],
+    [[cx, cy+r*0.25], [cx-r*0.25, cy-r*0.18], [cx+r*0.25, cy-r*0.18]],
+    [[cx, cy+r*0.08], [cx-r*0.1, cy-r*0.07], [cx+r*0.1, cy-r*0.07]],
+  ];
+
+  triangles.forEach((tri, i) => {
+    const op = 0.5 + (i % 2) * 0.2;
+    const color = i < 4 ? palette.primary : palette.accent;
+    svg += `<polygon points="${tri.map(p => p.join(',')).join(' ')}" fill="none" stroke="${color}" stroke-width="0.8" opacity="${op}"/>`;
+  });
+
+  // Bindu (center point)
+  svg += `<circle cx="${cx}" cy="${cy}" r="4" fill="${palette.accent}"/>`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="10" fill="none" stroke="${palette.accent}" stroke-width="0.6"/>`;
+
+  // Lotus petals
+  for (let i = 0; i < 16; i++) {
+    const a = (i / 16) * Math.PI * 2;
+    const x1 = cx + Math.cos(a) * r * 1.1;
+    const y1 = cy + Math.sin(a) * r * 1.1;
+    const x2 = cx + Math.cos(a + 0.2) * r * 1.2;
+    const y2 = cy + Math.sin(a + 0.2) * r * 1.2;
+    const x3 = cx + Math.cos(a - 0.2) * r * 1.2;
+    const y3 = cy + Math.sin(a - 0.2) * r * 1.2;
+    svg += `<path d="M ${x1} ${y1} Q ${x2} ${y2} ${cx + Math.cos(a + 0.1) * r * 1.3} ${cy + Math.sin(a + 0.1) * r * 1.3} Q ${x3} ${y3} ${x1} ${y1}" fill="none" stroke="${palette.secondary}" stroke-width="0.5" opacity="0.7"/>`;
+  }
+
+  // Outer squares
+  svg += `<rect x="${cx - r*1.35}" y="${cy - r*1.35}" width="${r*2.7}" height="${r*2.7}" fill="none" stroke="${palette.secondary}" stroke-width="0.6"/>`;
+  svg += `<rect x="${cx - r*1.45}" y="${cy - r*1.45}" width="${r*2.9}" height="${r*2.9}" fill="none" stroke="${palette.secondary}" stroke-width="0.3" opacity="0.5"/>`;
+
+  return svg;
+}
+
+function merkaba(cx, cy, r, palette) {
+  let svg = '';
+  // Two interlocking tetrahedra (projected as triangles)
+  const tri1 = [];
+  const tri2 = [];
+  for (let i = 0; i < 3; i++) {
+    const a = (i / 3) * Math.PI * 2 - Math.PI/2;
+    tri1.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]);
+    const a2 = (i / 3) * Math.PI * 2 + Math.PI/2;
+    tri2.push([cx + Math.cos(a2) * r, cy + Math.sin(a2) * r]);
+  }
+
+  svg += `<polygon points="${tri1.map(p => p.join(',')).join(' ')}" fill="none" stroke="${palette.primary}" stroke-width="1.2" filter="url(#glow)"/>`;
+  svg += `<polygon points="${tri2.map(p => p.join(',')).join(' ')}" fill="none" stroke="${palette.accent}" stroke-width="1.2" filter="url(#glow)"/>`;
+
+  // Inner structure
+  for (let i = 0; i < 3; i++) {
+    svg += `<line x1="${tri1[i][0]}" y1="${tri1[i][1]}" x2="${tri2[i][0]}" y2="${tri2[i][1]}" stroke="${palette.secondary}" stroke-width="0.5" opacity="0.6"/>`;
+  }
+
+  // Nested merkabas
+  for (let scale = 0.7; scale > 0.2; scale -= 0.2) {
+    const t1 = tri1.map(p => [cx + (p[0]-cx)*scale, cy + (p[1]-cy)*scale]);
+    const t2 = tri2.map(p => [cx + (p[0]-cx)*scale, cy + (p[1]-cy)*scale]);
+    svg += `<polygon points="${t1.map(p => p.join(',')).join(' ')}" fill="none" stroke="${palette.primary}" stroke-width="0.5" opacity="${scale}"/>`;
+    svg += `<polygon points="${t2.map(p => p.join(',')).join(' ')}" fill="none" stroke="${palette.accent}" stroke-width="0.5" opacity="${scale}"/>`;
+  }
+
+  // Center
+  svg += `<circle cx="${cx}" cy="${cy}" r="5" fill="${palette.accent}"/>`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.2}" fill="none" stroke="${palette.secondary}" stroke-width="0.3" stroke-dasharray="4,2"/>`;
+
+  return svg;
+}
+
+function torus(cx, cy, r, palette) {
+  let svg = '';
+  // Torus projection - concentric ellipses + flow lines
+  for (let i = 0; i < 12; i++) {
+    const ry = r * (0.3 + i * 0.07);
+    const rx = r * (1 - Math.abs(i - 6) * 0.08);
+    svg += `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${palette.primary}" stroke-width="0.5" opacity="${0.4 + i*0.03}"/>`;
+  }
+
+  // Flow lines through the donut hole
+  for (let i = 0; i < 16; i++) {
+    const a = (i / 16) * Math.PI * 2;
+    const startX = cx + Math.cos(a) * r * 0.3;
+    const startY = cy + Math.sin(a) * r * 0.3;
+    const endX = cx + Math.cos(a) * r * 1.1;
+    const endY = cy + Math.sin(a) * r * 1.1;
+    const ctrl1X = cx + Math.cos(a) * r * 0.7;
+    const ctrl1Y = cy + Math.sin(a) * r * 1.5;
+    svg += `<path d="M ${startX} ${startY} Q ${ctrl1X} ${ctrl1Y} ${endX} ${endY}" fill="none" stroke="${palette.accent}" stroke-width="0.6" opacity="0.5"/>`;
+  }
+
+  // Inner circle (hole)
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*0.3}" fill="none" stroke="${palette.accent}" stroke-width="1"/>`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="3" fill="${palette.accent}"/>`;
+
+  // Outer boundary
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.2}" fill="none" stroke="${palette.secondary}" stroke-width="0.3" stroke-dasharray="3,3"/>`;
+
+  return svg;
+}
+
+function treeOfLife(cx, cy, r, palette) {
+  let svg = '';
+  // 10 sephiroth positions
+  const sephiroth = [
+    [0, -0.9], // Kether
+    [-0.3, -0.6], [0.3, -0.6], // Chokmah, Binah
+    [-0.3, -0.2], [0.3, -0.2], // Chesed, Geburah
+    [0, 0], // Tiphareth
+    [-0.3, 0.3], [0.3, 0.3], // Netzach, Hod
+    [0, 0.6], // Yesod
+    [0, 0.9], // Malkuth
+  ];
+
+  // 22 paths
+  const paths = [[0,1],[0,2],[1,2],[1,3],[2,4],[3,4],[1,5],[2,5],[3,5],[4,5],[3,6],[4,7],[5,6],[5,7],[6,7],[6,8],[7,8],[8,9],[3,7],[4,6],[5,8],[1,4]];
+
+  // Draw paths
+  paths.forEach(([a, b]) => {
+    svg += `<line x1="${cx + sephiroth[a][0]*r}" y1="${cy + sephiroth[a][1]*r}" x2="${cx + sephiroth[b][0]*r}" y2="${cy + sephiroth[b][1]*r}" stroke="${palette.secondary}" stroke-width="0.6" opacity="0.6"/>`;
+  });
+
+  // Draw sephiroth
+  sephiroth.forEach(([x, y], i) => {
+    const px = cx + x * r;
+    const py = cy + y * r;
+    const size = r * 0.08;
+    svg += `<circle cx="${px}" cy="${py}" r="${size}" fill="${i===0 || i===5 ? palette.accent : 'none'}" stroke="${palette.primary}" stroke-width="0.8"/>`;
+    svg += `<circle cx="${px}" cy="${py}" r="${size*0.3}" fill="${palette.accent}"/>`;
+    svg += `<circle cx="${px}" cy="${py}" r="${size*1.6}" fill="none" stroke="${palette.secondary}" stroke-width="0.3" opacity="0.4"/>`;
+  });
+
+  // Three pillars (dashed lines)
+  svg += `<line x1="${cx - r*0.3}" y1="${cy - r*0.8}" x2="${cx - r*0.3}" y2="${cy + r*0.5}" stroke="${palette.secondary}" stroke-width="0.3" stroke-dasharray="2,4" opacity="0.4"/>`;
+  svg += `<line x1="${cx + r*0.3}" y1="${cy - r*0.8}" x2="${cx + r*0.3}" y2="${cy + r*0.5}" stroke="${palette.secondary}" stroke-width="0.3" stroke-dasharray="2,4" opacity="0.4"/>`;
+  svg += `<line x1="${cx}" y1="${cy - r}" x2="${cx}" y2="${cy + r}" stroke="${palette.accent}" stroke-width="0.3" stroke-dasharray="2,4" opacity="0.4"/>`;
+
+  return svg;
+}
+
+function dnaHelix(cx, cy, r, palette) {
+  let svg = '';
+  const steps = 40;
+  const turns = 4;
+  let points1 = [], points2 = [];
+
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const y = cy - r + t * r * 2;
+    const angle = t * Math.PI * 2 * turns;
+    const x1 = cx + Math.sin(angle) * r * 0.4;
+    const x2 = cx + Math.sin(angle + Math.PI) * r * 0.4;
+    points1.push([x1, y]);
+    points2.push([x2, y]);
+
+    // Base pairs (rungs)
+    if (i % 2 === 0) {
+      svg += `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${palette.accent}" stroke-width="0.5" opacity="0.5"/>`;
+    }
+  }
+
+  // Draw strands
+  const path1 = points1.map((p, i) => (i===0 ? 'M' : 'L') + p[0] + ' ' + p[1]).join(' ');
+  const path2 = points2.map((p, i) => (i===0 ? 'M' : 'L') + p[0] + ' ' + p[1]).join(' ');
+
+  svg += `<path d="${path1}" fill="none" stroke="${palette.primary}" stroke-width="1.2"/>`;
+  svg += `<path d="${path2}" fill="none" stroke="${palette.primary}" stroke-width="1.2"/>`;
+
+  // End caps
+  svg += `<circle cx="${cx}" cy="${cy - r}" r="3" fill="${palette.accent}"/>`;
+  svg += `<circle cx="${cx}" cy="${cy + r}" r="3" fill="${palette.accent}"/>`;
+
+  // Decorative frame
+  svg += `<rect x="${cx - r*0.8}" y="${cy - r*1.1}" width="${r*1.6}" height="${r*2.2}" fill="none" stroke="${palette.secondary}" stroke-width="0.4" opacity="0.5"/>`;
+
+  return svg;
+}
+
+function fibonacciSpiral(cx, cy, r, palette) {
+  let svg = '';
+  // Fibonacci sequence: 1, 1, 2, 3, 5, 8, 13, 21, 34...
+  const fib = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55];
+  const scale = r / 89;
+
+  let x = cx, y = cy;
+  let direction = 0; // 0=right, 1=down, 2=left, 3=up
+
+  for (let i = 0; i < fib.length; i++) {
+    const size = fib[i] * scale;
+    const [dx, dy] = [[size, 0], [0, size], [-size, 0], [0, -size]][direction];
+
+    // Draw square
+    svg += `<rect x="${x - (direction===0 ? 0 : direction===1 ? 0 : size)}" y="${y - (direction===1 ? 0 : direction===3 ? 0 : size)}" width="${size}" height="${size}" fill="none" stroke="${palette.primary}" stroke-width="0.5" opacity="${0.3 + i*0.05}"/>`;
+
+    // Draw quarter arc
+    const arcCx = x + (direction===0 ? size : direction===2 ? 0 : direction===1 ? size : 0);
+    const arcCy = y + (direction===1 ? size : direction===3 ? 0 : direction===0 ? size : 0);
+    const startA = [Math.PI, -Math.PI/2, 0, Math.PI/2][direction];
+    const endA = startA + Math.PI/2;
+
+    x += dx;
+    y += dy;
+    direction = (direction + 1) % 4;
+  }
+
+  // Spiral curve
+  let path = '';
+  let theta = 0;
+  const b = Math.log(1.618) / (Math.PI/2);
+  const a = 0.5;
+  for (let i = 0; i < 100; i++) {
+    theta = i * 0.1;
+    const sr = a * Math.exp(b * theta);
+    const px = cx + Math.cos(theta) * sr;
+    const py = cy + Math.sin(theta) * sr;
+    if (sr > r * 1.2) break;
+    path += (i === 0 ? 'M' : 'L') + px + ' ' + py + ' ';
+  }
+  svg += `<path d="${path}" fill="none" stroke="${palette.accent}" stroke-width="1.2" filter="url(#glow)"/>`;
+
+  return svg;
+}
+
+function sacredCircles(cx, cy, r, palette) {
+  let svg = '';
+  // Concentric circles with intricate patterns
+  for (let i = 1; i <= 8; i++) {
+    const rad = (i / 8) * r;
+    svg += `<circle cx="${cx}" cy="${cy}" r="${rad}" fill="none" stroke="${palette.primary}" stroke-width="${0.3 + (8-i)*0.1}" opacity="${0.4 + i*0.05}"/>`;
+  }
+
+  // Radiating lines
+  for (let i = 0; i < 36; i++) {
+    const a = (i / 36) * Math.PI * 2;
+    const len = r * (0.3 + (i % 4) * 0.2);
+    svg += `<line x1="${cx}" y1="${cy}" x2="${cx + Math.cos(a)*len}" y2="${cy + Math.sin(a)*len}" stroke="${palette.secondary}" stroke-width="0.3" opacity="0.5"/>`;
+  }
+
+  // Decorative dots
+  for (let ring = 1; ring <= 6; ring++) {
+    const ringR = (ring / 7) * r;
+    const count = ring * 4;
+    for (let i = 0; i < count; i++) {
+      const a = (i / count) * Math.PI * 2;
+      const px = cx + Math.cos(a) * ringR;
+      const py = cy + Math.sin(a) * ringR;
+      svg += `<circle cx="${px}" cy="${py}" r="1.5" fill="${palette.accent}" opacity="0.8"/>`;
+    }
+  }
+
+  // Central mandala
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2;
+    const px = cx + Math.cos(a) * r * 0.15;
+    const py = cy + Math.sin(a) * r * 0.15;
+    svg += `<circle cx="${px}" cy="${py}" r="${r*0.15}" fill="none" stroke="${palette.accent}" stroke-width="0.6" opacity="0.6"/>`;
+  }
+
+  svg += `<circle cx="${cx}" cy="${cy}" r="4" fill="${palette.accent}"/>`;
+
+  return svg;
+}
+
+function mandala(cx, cy, r, palette) {
+  let svg = '';
+  // Multiple layers of mandala
+  const layers = [
+    { petals: 8, radius: r * 0.3, size: r * 0.15 },
+    { petals: 12, radius: r * 0.5, size: r * 0.12 },
+    { petals: 16, radius: r * 0.7, size: r * 0.1 },
+    { petals: 24, radius: r * 0.9, size: r * 0.08 },
+  ];
+
+  layers.forEach((layer, li) => {
+    for (let i = 0; i < layer.petals; i++) {
+      const a = (i / layer.petals) * Math.PI * 2;
+      const px = cx + Math.cos(a) * layer.radius;
+      const py = cy + Math.sin(a) * layer.radius;
+
+      // Petal shape
+      const a1 = a - 0.3;
+      const a2 = a + 0.3;
+      const tip = [cx + Math.cos(a) * (layer.radius + layer.size), cy + Math.sin(a) * (layer.radius + layer.size)];
+      const base1 = [cx + Math.cos(a1) * (layer.radius - layer.size*0.3), cy + Math.sin(a1) * (layer.radius - layer.size*0.3)];
+      const base2 = [cx + Math.cos(a2) * (layer.radius - layer.size*0.3), cy + Math.sin(a2) * (layer.radius - layer.size*0.3)];
+
+      svg += `<path d="M ${px} ${py} L ${base1[0]} ${base1[1]} Q ${tip[0]} ${tip[1]} ${base2[0]} ${base2[1]} Z" fill="none" stroke="${palette.primary}" stroke-width="0.6" opacity="${0.5 + li*0.1}"/>`;
+
+      // Inner dot
+      svg += `<circle cx="${px}" cy="${py}" r="1.5" fill="${palette.accent}"/>`;
+    }
+
+    // Ring
+    svg += `<circle cx="${cx}" cy="${cy}" r="${layer.radius}" fill="none" stroke="${palette.secondary}" stroke-width="0.3" opacity="0.4" stroke-dasharray="1,2"/>`;
+  });
+
+  // Center
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*0.1}" fill="none" stroke="${palette.accent}" stroke-width="1"/>`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*0.05}" fill="${palette.accent}"/>`;
+
+  // Outer frame
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.1}" fill="none" stroke="${palette.secondary}" stroke-width="0.4"/>`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.15}" fill="none" stroke="${palette.secondary}" stroke-width="0.2" stroke-dasharray="2,2"/>`;
+
+  return svg;
+}
+
+function platonicSolid(cx, cy, r, palette, pageNum) {
+  let svg = '';
+  // Choose different solid based on page number
+  const solids = ['tetrahedron', 'cube', 'octahedron', 'dodecahedron', 'icosahedron'];
+  const solid = solids[pageNum % 5];
+
+  let vertices = [];
+  let edges = [];
+
+  if (solid === 'tetrahedron') {
+    vertices = [[0, -0.9], [-0.8, 0.5], [0.8, 0.5], [0, 0]];
+    edges = [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]];
+  } else if (solid === 'cube') {
+    vertices = [[-0.7,-0.7],[0.7,-0.7],[0.7,0.7],[-0.7,0.7],[-0.4,-0.4],[0.4,-0.4],[0.4,0.4],[-0.4,0.4]];
+    edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+  } else if (solid === 'octahedron') {
+    vertices = [[0,-0.9],[0,0.9],[-0.9,0],[0.9,0],[-0.5,-0.5],[0.5,-0.5],[-0.5,0.5],[0.5,0.5]];
+    edges = [[0,4],[0,5],[1,6],[1,7],[2,4],[2,6],[3,5],[3,7],[4,5],[5,7],[7,6],[6,4]];
+  } else if (solid === 'dodecahedron') {
+    // Projected as pentagon with internal structure
+    for (let i = 0; i < 5; i++) {
+      const a = (i/5) * Math.PI * 2 - Math.PI/2;
+      vertices.push([Math.cos(a)*0.9, Math.sin(a)*0.9]);
+    }
+    for (let i = 0; i < 5; i++) {
+      const a = (i/5) * Math.PI * 2 - Math.PI/2 + Math.PI/5;
+      vertices.push([Math.cos(a)*0.5, Math.sin(a)*0.5]);
+    }
+    for (let i = 0; i < 5; i++) {
+      edges.push([i, (i+1)%5]);
+      edges.push([i+5, (i+1)%5+5]);
+      edges.push([i, i+5]);
+      edges.push([i, (i+4)%5+5]);
+    }
+  } else { // icosahedron
+    for (let i = 0; i < 6; i++) {
+      const a = (i/6) * Math.PI * 2;
+      vertices.push([Math.cos(a)*0.9, Math.sin(a)*0.9]);
+    }
+    for (let i = 0; i < 6; i++) {
+      const a = (i/6) * Math.PI * 2 + Math.PI/6;
+      vertices.push([Math.cos(a)*0.5, Math.sin(a)*0.5]);
+    }
+    for (let i = 0; i < 6; i++) {
+      edges.push([i, (i+1)%6]);
+      edges.push([i+6, (i+1)%6+6]);
+      edges.push([i, i+6]);
+      edges.push([i, (i+5)%6+6]);
+    }
+  }
+
+  // Draw edges
+  edges.forEach(([a, b]) => {
+    svg += `<line x1="${cx + vertices[a][0]*r}" y1="${cy + vertices[a][1]*r}" x2="${cx + vertices[b][0]*r}" y2="${cy + vertices[b][1]*r}" stroke="${palette.primary}" stroke-width="0.8" opacity="0.7"/>`;
+  });
+
+  // Draw vertices
+  vertices.forEach(([x, y]) => {
+    svg += `<circle cx="${cx + x*r}" cy="${cy + y*r}" r="3" fill="${palette.accent}"/>`;
+  });
+
+  // Outer boundary
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.15}" fill="none" stroke="${palette.secondary}" stroke-width="0.3"/>`;
+
+  return svg;
+}
+
+function neuralNet(cx, cy, r, palette) {
+  let svg = '';
+  // Generate random-looking neural network
+  const nodes = [];
+  const nodeCount = 30;
+  // Distribute in concentric rings with some randomness
+  for (let ring = 1; ring <= 4; ring++) {
+    const ringR = (ring / 5) * r;
+    const count = ring * 6;
+    for (let i = 0; i < count; i++) {
+      const a = (i / count) * Math.PI * 2 + (ring % 2) * 0.2;
+      const noise = 0.9 + Math.sin(i * 13.7) * 0.1;
+      nodes.push([cx + Math.cos(a) * ringR * noise, cy + Math.sin(a) * ringR * noise]);
+    }
+  }
+  // Add central node
+  nodes.push([cx, cy]);
+
+  // Connect nodes (only nearby ones)
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i][0] - nodes[j][0];
+      const dy = nodes[i][1] - nodes[j][1];
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < r * 0.35 && Math.random() < 0.3) {
+        svg += `<line x1="${nodes[i][0]}" y1="${nodes[i][1]}" x2="${nodes[j][0]}" y2="${nodes[j][1]}" stroke="${palette.secondary}" stroke-width="0.3" opacity="0.4"/>`;
+      }
+    }
+  }
+
+  // Draw nodes
+  nodes.forEach(([x, y], i) => {
+    const size = i === nodes.length - 1 ? 5 : 2 + Math.sin(i * 2.3) * 1;
+    const color = i === nodes.length - 1 ? palette.accent : palette.primary;
+    svg += `<circle cx="${x}" cy="${y}" r="${size}" fill="${color}" opacity="0.9"/>`;
+  });
+
+  // Outer boundary
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${palette.secondary}" stroke-width="0.4" stroke-dasharray="2,3"/>`;
+
+  return svg;
+}
+
+function chakraLadder(cx, cy, r, palette) {
+  let svg = '';
+  // 7 chakras along vertical axis
+  const chakraCount = 7;
+  const spacing = r * 1.8 / (chakraCount - 1);
+  const startY = cy - r * 0.9;
+
+  for (let i = 0; i < chakraCount; i++) {
+    const y = startY + i * spacing;
+    const size = r * 0.08;
+    // Petals around chakra
+    const petals = 4 + i * 2;
+    for (let p = 0; p < petals; p++) {
+      const a = (p / petals) * Math.PI * 2;
+      const px = cx + Math.cos(a) * size * 1.5;
+      const py = y + Math.sin(a) * size * 1.5;
+      svg += `<ellipse cx="${px}" cy="${py}" rx="${size*0.6}" ry="${size*0.3}" fill="none" stroke="${palette.primary}" stroke-width="0.4" opacity="0.5" transform="rotate(${(p/petals)*360}, ${px}, ${py})"/>`;
+    }
+    // Central chakra
+    svg += `<circle cx="${cx}" cy="${y}" r="${size}" fill="${i === 3 || i === 6 ? palette.accent : 'none'}" stroke="${palette.primary}" stroke-width="0.8"/>`;
+    svg += `<circle cx="${cx}" cy="${y}" r="${size*0.3}" fill="${palette.accent}"/>`;
+
+    // Connect to next
+    if (i < chakraCount - 1) {
+      svg += `<line x1="${cx}" y1="${y + size}" x2="${cx}" y2="${y + spacing - size}" stroke="${palette.secondary}" stroke-width="0.5" opacity="0.6"/>`;
+    }
+  }
+
+  // Ida and Pingala (serpent channels)
+  for (let side = -1; side <= 1; side += 2) {
+    let path = `M ${cx} ${startY}`;
+    for (let i = 1; i <= chakraCount - 1; i++) {
+      const y = startY + i * spacing;
+      const x = cx + Math.sin(i * Math.PI) * side * r * 0.15;
+      path += ` Q ${cx + side * r * 0.15} ${y - spacing/2} ${x} ${y}`;
+    }
+    svg += `<path d="${path}" fill="none" stroke="${palette.accent}" stroke-width="0.8" opacity="0.7"/>`;
+  }
+
+  // Outer frame
+  svg += `<rect x="${cx - r*0.6}" y="${cy - r}" width="${r*1.2}" height="${r*2}" fill="none" stroke="${palette.secondary}" stroke-width="0.4" opacity="0.5"/>`;
+
+  return svg;
+}
+
+function vesicaPiscis(cx, cy, r, palette) {
+  let svg = '';
+  // Two overlapping circles
+  const offset = r * 0.5;
+  svg += `<circle cx="${cx - offset}" cy="${cy}" r="${r}" fill="none" stroke="${palette.primary}" stroke-width="1"/>`;
+  svg += `<circle cx="${cx + offset}" cy="${cy}" r="${r}" fill="none" stroke="${palette.primary}" stroke-width="1"/>`;
+
+  // The almond intersection
+  const interH = r * Math.sqrt(3) / 2;
+  svg += `<ellipse cx="${cx}" cy="${cy}" rx="${r - offset}" ry="${interH}" fill="none" stroke="${palette.accent}" stroke-width="1.2" filter="url(#glow)"/>`;
+
+  // Inner geometric construction
+  const topY = cy - interH;
+  const bottomY = cy + interH;
+  // Equilateral triangle
+  svg += `<polygon points="${cx - offset},${cy} ${cx + r},${topY + interH*0.3} ${cx + r},${bottomY - interH*0.3}" fill="none" stroke="${palette.secondary}" stroke-width="0.5" opacity="0.6"/>`;
+  svg += `<polygon points="${cx + offset},${cy} ${cx - r},${topY + interH*0.3} ${cx - r},${bottomY - interH*0.3}" fill="none" stroke="${palette.secondary}" stroke-width="0.5" opacity="0.6"/>`;
+
+  // Central cross
+  svg += `<line x1="${cx}" y1="${topY}" x2="${cx}" y2="${bottomY}" stroke="${palette.accent}" stroke-width="0.8"/>`;
+  svg += `<line x1="${cx - offset}" y1="${cy}" x2="${cx + offset}" y2="${cy}" stroke="${palette.accent}" stroke-width="0.8"/>`;
+
+  // Central point
+  svg += `<circle cx="${cx}" cy="${cy}" r="4" fill="${palette.accent}"/>`;
+
+  // Outer circle
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.3}" fill="none" stroke="${palette.secondary}" stroke-width="0.3" stroke-dasharray="2,3"/>`;
+
+  return svg;
+}
+
+function seedOfLife(cx, cy, r, palette) {
+  let svg = '';
+  // 7 circles: center + 6 around
+  const innerR = r / 3;
+  svg += `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${palette.accent}" stroke-width="1.2" filter="url(#glow)"/>`;
+
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    const px = cx + Math.cos(a) * innerR;
+    const py = cy + Math.sin(a) * innerR;
+    svg += `<circle cx="${px}" cy="${py}" r="${innerR}" fill="none" stroke="${palette.primary}" stroke-width="0.8"/>`;
+  }
+
+  // Outer boundary (Egg of Life)
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*0.85}" fill="none" stroke="${palette.secondary}" stroke-width="0.6"/>`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*1.1}" fill="none" stroke="${palette.secondary}" stroke-width="0.3" stroke-dasharray="2,2"/>`;
+
+  // Central bindu
+  svg += `<circle cx="${cx}" cy="${cy}" r="3" fill="${palette.accent}"/>`;
+
+  return svg;
+}
+
+function kundalini(cx, cy, r, palette) {
+  let svg = '';
+  // Central spine with coiled serpent
+  svg += `<line x1="${cx}" y1="${cy - r}" x2="${cx}" y2="${cy + r}" stroke="${palette.primary}" stroke-width="0.6" opacity="0.5"/>`;
+
+  // Coiled serpent at base
+  const baseY = cy + r * 0.6;
+  for (let i = 0; i < 4; i++) {
+    const y = baseY - i * r * 0.08;
+    const rx = r * 0.3 - i * r * 0.03;
+    const ry = r * 0.05;
+    svg += `<ellipse cx="${cx}" cy="${y}" rx="${rx}" ry="${ry}" fill="none" stroke="${palette.accent}" stroke-width="0.8" opacity="${0.7 - i*0.1}"/>`;
+  }
+
+  // Rising serpent path (sine wave)
+  let path = `M ${cx} ${baseY}`;
+  for (let i = 0; i <= 20; i++) {
+    const t = i / 20;
+    const y = baseY - t * (baseY - cy + r);
+    const x = cx + Math.sin(t * Math.PI * 4) * r * 0.2 * (1 - t);
+    path += ` L ${x} ${y}`;
+  }
+  svg += `<path d="${path}" fill="none" stroke="${palette.accent}" stroke-width="1.2" filter="url(#glow)"/>`;
+
+  // 7 chakra points along the spine
+  for (let i = 0; i < 7; i++) {
+    const y = cy + r * 0.7 - i * (r * 1.4 / 6);
+    svg += `<circle cx="${cx}" cy="${y}" r="${r*0.04}" fill="${palette.accent}"/>`;
+    svg += `<circle cx="${cx}" cy="${y}" r="${r*0.08}" fill="none" stroke="${palette.primary}" stroke-width="0.5" opacity="0.6"/>`;
+  }
+
+  // Crown at top
+  svg += `<polygon points="${cx},${cy - r} ${cx - r*0.15},${cy - r + r*0.1} ${cx + r*0.15},${cy - r + r*0.1}" fill="${palette.accent}" opacity="0.8"/>`;
+
+  // Base lotus
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI - Math.PI/2;
+    svg += `<ellipse cx="${cx + Math.cos(a)*r*0.2}" cy="${cy + r*0.85 + Math.sin(a)*r*0.05}" rx="${r*0.2}" ry="${r*0.05}" fill="none" stroke="${palette.primary}" stroke-width="0.5" opacity="0.6"/>`;
+  }
+
+  return svg;
+}
+
+function akashicWeb(cx, cy, r, palette) {
+  let svg = '';
+  // Web-like structure with nodes and connections
+  const nodeCount = 40;
+  const nodes = [];
+  for (let i = 0; i < nodeCount; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const rad = Math.sqrt(Math.random()) * r * 0.9;
+    nodes.push([cx + Math.cos(angle) * rad, cy + Math.sin(angle) * rad]);
+  }
+
+  // Connect nodes
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i][0] - nodes[j][0];
+      const dy = nodes[i][1] - nodes[j][1];
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < r * 0.3) {
+        svg += `<line x1="${nodes[i][0]}" y1="${nodes[i][1]}" x2="${nodes[j][0]}" y2="${nodes[j][1]}" stroke="${palette.secondary}" stroke-width="0.3" opacity="${0.5 - dist/(r*0.6)}"/>`;
+      }
+    }
+  }
+
+  // Draw nodes
+  nodes.forEach(([x, y], i) => {
+    const size = 1.5 + Math.sin(i * 3.7) * 0.8;
+    svg += `<circle cx="${x}" cy="${y}" r="${size}" fill="${palette.primary}" opacity="0.8"/>`;
+  });
+
+  // Highlight some nodes as "records"
+  for (let i = 0; i < 5; i++) {
+    const idx = Math.floor(i * nodeCount / 5);
+    svg += `<circle cx="${nodes[idx][0]}" cy="${nodes[idx][1]}" r="5" fill="none" stroke="${palette.accent}" stroke-width="1"/>`;
+    svg += `<circle cx="${nodes[idx][0]}" cy="${nodes[idx][1]}" r="2" fill="${palette.accent}"/>`;
+  }
+
+  // Outer boundary
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${palette.secondary}" stroke-width="0.4" stroke-dasharray="2,2"/>`;
+
+  return svg;
+}
+
+function monadSymbol(cx, cy, r, palette) {
+  let svg = '';
+  // John Dee's Monas Hieroglyphica - mystical symbol
+  // Central circle
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*0.2}" fill="none" stroke="${palette.primary}" stroke-width="1.2"/>`;
+  // Cross
+  svg += `<line x1="${cx - r*0.25}" y1="${cy}" x2="${cx + r*0.25}" y2="${cy}" stroke="${palette.primary}" stroke-width="1"/>`;
+  svg += `<line x1="${cx}" y1="${cy - r*0.25}" x2="${cx}" y2="${cy + r*0.25}" stroke="${palette.primary}" stroke-width="1"/>`;
+  // Moon crescent on top
+  svg += `<path d="M ${cx - r*0.15} ${cy - r*0.35} A ${r*0.15} ${r*0.15} 0 0 1 ${cx + r*0.15} ${cy - r*0.35}" fill="none" stroke="${palette.primary}" stroke-width="1"/>`;
+  svg += `<path d="M ${cx - r*0.15} ${cy - r*0.35} A ${r*0.25} ${r*0.25} 0 0 0 ${cx + r*0.15} ${cy - r*0.35}" fill="none" stroke="${palette.primary}" stroke-width="1"/>`;
+  // Aries-like base
+  svg += `<path d="M ${cx - r*0.2} ${cy + r*0.5} Q ${cx - r*0.1} ${cy + r*0.25} ${cx} ${cy + r*0.25} Q ${cx + r*0.1} ${cy + r*0.25} ${cx + r*0.2} ${cy + r*0.5}" fill="none" stroke="${palette.primary}" stroke-width="1"/>`;
+  // Fire triangle
+  svg += `<polygon points="${cx},${cy - r*0.5} ${cx - r*0.1},${cy - r*0.25} ${cx + r*0.1},${cy - r*0.25}" fill="none" stroke="${palette.accent}" stroke-width="0.8"/>`;
+
+  // Outer decorative circles
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*0.6}" fill="none" stroke="${palette.secondary}" stroke-width="0.5" opacity="0.6"/>`;
+  svg += `<circle cx="${cx}" cy="${cy}" r="${r*0.85}" fill="none" stroke="${palette.secondary}" stroke-width="0.3" opacity="0.4"/>`;
+
+  // Radial lines
+  for (let i = 0; i < 24; i++) {
+    const a = (i / 24) * Math.PI * 2;
+    svg += `<line x1="${cx + Math.cos(a)*r*0.6}" y1="${cy + Math.sin(a)*r*0.6}" x2="${cx + Math.cos(a)*r*0.85}" y2="${cy + Math.sin(a)*r*0.85}" stroke="${palette.secondary}" stroke-width="0.3" opacity="0.5"/>`;
+  }
+
+  svg += `<circle cx="${cx}" cy="${cy}" r="3" fill="${palette.accent}"/>`;
+
+  return svg;
+}
+
+// Main pattern router
+function generatePattern(variation, cx, cy, r, pageNum) {
+  const palette = getPalette(variation.palette);
+  switch (variation.pattern) {
+    case 'flowerOfLife': return flowerOfLife(cx, cy, r, palette);
+    case 'metatronCube': return metatronCube(cx, cy, r, palette);
+    case 'sriYantra': return sriYantra(cx, cy, r, palette);
+    case 'merkaba': return merkaba(cx, cy, r, palette);
+    case 'torus': return torus(cx, cy, r, palette);
+    case 'treeOfLife': return treeOfLife(cx, cy, r, palette);
+    case 'dnaHelix': return dnaHelix(cx, cy, r, palette);
+    case 'fibonacciSpiral': return fibonacciSpiral(cx, cy, r, palette);
+    case 'sacredCircles': return sacredCircles(cx, cy, r, palette);
+    case 'mandala': return mandala(cx, cy, r, palette);
+    case 'platonicsolid': return platonicSolid(cx, cy, r, palette, pageNum);
+    case 'neuralnet': return neuralNet(cx, cy, r, palette);
+    case 'chakraladder': return chakraLadder(cx, cy, r, palette);
+    case 'vesica': return vesicaPiscis(cx, cy, r, palette);
+    case 'dodecahedron': return platonicSolid(cx, cy, r, palette, 3);
+    case 'icosahedron': return platonicSolid(cx, cy, r, palette, 4);
+    case 'seedoflife': return seedOfLife(cx, cy, r, palette);
+    case 'kundalini': return kundalini(cx, cy, r, palette);
+    case 'akashicweb': return akashicWeb(cx, cy, r, palette);
+    case 'monad': return monadSymbol(cx, cy, r, palette);
+    default: return sacredCircles(cx, cy, r, palette);
+  }
+}
+
+// ========================================
+// PAGE RENDERING
+// ========================================
+
+function renderPage(pageNum) {
+  currentPage = pageNum;
+  const data = generatePageData(pageNum + 1);
+  const lang = currentLang;
+
+  // Update indicators
+  document.getElementById('pageIndicator').textContent = `${toRoman(pageNum + 1)} / ${toRoman(TOTAL_PAGES)}`;
+  document.getElementById('pageFolio').textContent = `FOLIO ${toRoman(pageNum + 1)}`;
+  document.getElementById('plateLabel').textContent = lang === 'fa' ? `لوح ${toPersianNum(pageNum + 1)}` : `PLATE ${toRoman(pageNum + 1)}`;
+
+  // Title & subtitle
+  document.getElementById('pageTitle').textContent = data.theme[lang].title;
+  document.getElementById('pageSubtitle').textContent = data.theme[lang].subtitle;
+
+  // Jump input
+  document.getElementById('pageJump').value = pageNum + 1;
+
+  // Illustration
+  const W = 600, H = 600;
+  const cx = W / 2, cy = H / 2;
+  const r = 180;
+
+  let svgContent = svgBase(W, H);
+
+  // Outer decorative frame
+  svgContent += `<rect x="20" y="20" width="${W-40}" height="${H-40}" fill="none" stroke="#8a6a2e" stroke-width="0.4" opacity="0.5"/>`;
+  svgContent += `<rect x="15" y="15" width="${W-30}" height="${H-30}" fill="none" stroke="#8a6a2e" stroke-width="0.2" opacity="0.3"/>`;
+
+  // Corner ornaments
+  const corners = [[30, 30], [W-30, 30], [30, H-30], [W-30, H-30]];
+  corners.forEach(([x, y]) => {
+    svgContent += `<g stroke="#d4a84b" stroke-width="0.6" fill="none" opacity="0.7">
+      <circle cx="${x}" cy="${y}" r="8"/>
+      <circle cx="${x}" cy="${y}" r="4"/>
+      <circle cx="${x}" cy="${y}" r="1.5" fill="#d4a84b"/>
+    </g>`;
+  });
+
+  // Main pattern
+  svgContent += generatePattern(data.variation, cx, cy, r, pageNum);
+
+  // Hotspots - position them around the main pattern
+  const hotspotPositions = [];
+  const hotspotsCount = data.hotspots.length;
+  for (let i = 0; i < hotspotsCount; i++) {
+    const angle = (i / hotspotsCount) * Math.PI * 2 - Math.PI / 2;
+    const hotspotR = r * 0.55 + (pageNum % 3) * 15;
+    const x = cx + Math.cos(angle) * hotspotR;
+    const y = cy + Math.sin(angle) * hotspotR;
+    hotspotPositions.push([x, y]);
+  }
+
+  // Render hotspots
+  hotspotPositions.forEach(([x, y], i) => {
+    svgContent += `
+      <g class="hotspot" onclick="showHotspot(${i})" style="cursor:pointer;">
+        <circle cx="${x}" cy="${y}" r="18" fill="rgba(212,168,75,0.05)"/>
+        <circle class="halo" cx="${x}" cy="${y}" r="12" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
+        <circle cx="${x}" cy="${y}" r="6" fill="none" stroke="#d4a84b" stroke-width="0.6"/>
+        <circle cx="${x}" cy="${y}" r="2" fill="#d4a84b"/>
+        <text x="${x}" y="${y + 30}" text-anchor="middle" font-family="Cinzel, serif" font-size="7" fill="#d4a84b" letter-spacing="2" opacity="0.7">${toRoman(i+1)}</text>
+      </g>
+    `;
+  });
+
+  // Connect hotspots with subtle lines
+  for (let i = 0; i < hotspotPositions.length; i++) {
+    const [x1, y1] = hotspotPositions[i];
+    const [x2, y2] = hotspotPositions[(i+1) % hotspotPositions.length];
+    svgContent += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#8a6a2e" stroke-width="0.2" stroke-dasharray="2,4" opacity="0.4"/>`;
+  }
+
+  // Bottom inscription
+  const inscription = lang === 'fa'
+    ? `موریندوک · لوح ${toPersianNum(pageNum + 1)}`
+    : `MORINDOK · PLATE ${toRoman(pageNum + 1)}`;
+  svgContent += `<text x="${W/2}" y="${H - 35}" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#8a6a2e" letter-spacing="3">${inscription}</text>`;
+
+  svgContent += '</svg>';
+
+  document.getElementById('illustrationContainer').innerHTML = svgContent;
+
+  // Store hotspots for click handling
+  window.__currentHotspots = data.hotspots;
+
+  // Close description if open
+  document.getElementById('descPanel').classList.add('hidden');
+
+  // Scroll to top of viewer
+  document.getElementById('bookViewer').scrollTop = 0;
+}
+
+function showHotspot(idx) {
+  const hotspot = window.__currentHotspots[idx];
+  const lang = currentLang;
+
+  document.getElementById('descLabel').textContent = lang === 'fa' ? `کشف ${toPersianNum(idx+1)}` : `REVELATION ${toRoman(idx+1)}`;
+  document.getElementById('descTitle').textContent = hotspot[lang].name;
+  document.getElementById('descBody').textContent = hotspot[lang].desc;
+
+  document.getElementById('descPanel').classList.remove('hidden');
+  setTimeout(() => {
+    document.getElementById('descPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
+}
+
+function closeDesc() {
+  document.getElementById('descPanel').classList.add('hidden');
+}
+
+// ========================================
+// NAVIGATION
+// ========================================
+
+function openBook(page) {
+  document.getElementById('bookViewer').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  renderPage(page);
+}
+
+function closeBook() {
+  document.getElementById('bookViewer').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function nextPage() {
+  if (currentPage < TOTAL_PAGES - 1) {
+    renderPage(currentPage + 1);
+  }
+}
+
+function prevPage() {
+  if (currentPage > 0) {
+    renderPage(currentPage - 1);
+  }
+}
+
+function jumpToPage() {
+  const val = parseInt(document.getElementById('pageJump').value);
+  if (val >= 1 && val <= TOTAL_PAGES) {
+    renderPage(val - 1);
+  }
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('bookViewer').style.display !== 'none') {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextPage();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevPage();
+    if (e.key === 'Escape') closeBook();
+  }
+  if (e.key === 'Escape' && document.getElementById('gate').style.display !== 'none') {
+    // Do nothing
+  }
+});
+
+// Telegram copy
+function copyTgLink() {
+  const link = 'https://t.me/aigods10';
+  navigator.clipboard?.writeText(link).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const original = btn.innerHTML;
+    btn.innerHTML = `<span style="color: var(--ink-gold)">✓ COPIED</span>`;
+    setTimeout(() => btn.innerHTML = original, 2000);
+  });
+}
+
+// Initial language setup
+setLang('en');
+
+// Generate shareable link info
+console.log('%c ⟡ MORINDOK ARCHIVES ⟡ ', 'background: #d4a84b; color: #050207; font-size: 20px; padding: 10px; font-family: serif;');
+console.log('%c Access URL: ' + window.location.origin + window.location.pathname + '?access=spirit-machine-2024', 'color: #d4a84b;');
+console.log('%c Passphrase: morindok', 'color: #8a6a2e;');
+</script>
+
+</body>
+</html>
