@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Soul Machine by Morindok | The Spirit Machine — ماشینِ روح</title>
 <meta name="description" content="Soul Machine (The Spirit Machine / ماشین روح) by Morindok — an interactive illustrated codex of 101 generated plates on sacred geometry, Kabbalah, chakras and mystical symbolism. Bilingual English/Persian reader. یک کتاب مصور تعاملی دوزبانه از موریندوک.">
 <meta name="keywords" content="Soul Machine, Spirit Machine, Morindok, ماشین روح, موریندوک, sacred geometry, illustrated book, digital codex, esoteric art, هندسه مقدس, کتاب مصور">
@@ -72,7 +72,7 @@
 
   body::before {
     content: '';
-    position: fixed; inset: 0;
+    position: fixed; top: 0; right: 0; bottom: 0; left: 0;
     background:
       radial-gradient(ellipse at 20% 10%, rgba(107,16,34,0.25), transparent 50%),
       radial-gradient(ellipse at 80% 90%, rgba(74,122,138,0.18), transparent 55%),
@@ -83,7 +83,7 @@
 
   body::after {
     content: '';
-    position: fixed; inset: 0;
+    position: fixed; top: 0; right: 0; bottom: 0; left: 0;
     background-image:
       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
     opacity: 0.5;
@@ -113,12 +113,16 @@
 
   /* Gate */
   #gate {
-    position: fixed; inset: 0;
+    position: fixed; top: 0; right: 0; bottom: 0; left: 0;
     background: radial-gradient(ellipse at center, #0a0510 0%, #020103 100%);
     z-index: 9999;
     display: flex; align-items: center; justify-content: center;
     flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 24px 16px;
   }
+  #gate > * { flex-shrink: 0; }
 
   .sigil {
     width: 240px; height: 240px;
@@ -239,7 +243,7 @@
   /* Candle effect */
   .candle-glow {
     background: radial-gradient(ellipse at 50% 30%, rgba(255,180,80,0.15), transparent 60%);
-    position: absolute; inset: 0;
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
     pointer-events: none;
   }
 
@@ -278,6 +282,31 @@
       animation: none !important;
       transition: none !important;
     }
+  }
+
+  @media (max-height: 800px), (max-width: 480px) {
+    #gate { justify-content: flex-start; }
+    .sigil { width: 150px; height: 150px; }
+    .gate-input { width: 220px; }
+  }
+
+  @media (pointer: coarse) {
+    .gate-input { font-size: 16px; }
+    #pageJump { font-size: 16px !important; }
+    #gateForm button { padding-top: 12px; padding-bottom: 12px; }
+    .hotspot { touch-action: manipulation; }
+  }
+
+  @media (max-width: 480px) {
+    #pageFolio { display: none; }
+    #bookViewer .sticky { padding-left: 10px; padding-right: 10px; }
+    #bookViewer .py-8 { padding-top: 16px; padding-bottom: 16px; }
+    .book-page, #pageTitle { overflow-wrap: break-word; }
+  }
+
+  @supports not (aspect-ratio: 1 / 1) {
+    .shelf .aspect-\[2\/3\] { padding-top: 150%; position: relative; }
+    .shelf .aspect-\[2\/3\] > svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
   }
 </style>
 </head>
@@ -566,7 +595,7 @@
 </div>
 
 <!-- ============== BOOK VIEWER MODAL ============== -->
-<div id="bookViewer" style="display:none; position: fixed; inset: 0; background: radial-gradient(ellipse at center, #0a0510 0%, #020103 100%); z-index: 10000; overflow-y: auto;">
+<div id="bookViewer" style="display:none; position: fixed; top:0; right:0; bottom:0; left:0; background: radial-gradient(ellipse at center, #0a0510 0%, #020103 100%); z-index: 10000; overflow-y: auto; -webkit-overflow-scrolling: touch;">
   <div class="candle-glow"></div>
   <div class="smoke"></div>
 
@@ -1653,6 +1682,7 @@ function renderPage(pageNum) {
   hotspotPositions.forEach(([x, y], i) => {
     svgContent += `
       <g class="hotspot" onclick="showHotspot(${i})" style="cursor:pointer;">
+        <circle cx="${x}" cy="${y}" r="30" fill="transparent"/>
         <circle cx="${x}" cy="${y}" r="18" fill="rgba(212,168,75,0.05)"/>
         <circle class="halo" cx="${x}" cy="${y}" r="12" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
         <circle cx="${x}" cy="${y}" r="6" fill="none" stroke="#d4a84b" stroke-width="0.6"/>
